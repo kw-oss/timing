@@ -36,9 +36,14 @@ def mainButtonPressed():
     # put some search result to `data`
     data = None
     displaySearchResult(data)
+    print(preference)
 
 
 def displaySearchResult(data):
+    # hide question label
+    questionLabel.grid_remove()
+    foodCategoryCheckButtons.grid_remove()
+
     # prevents displaying large window bigger than minsize
     width = map_placeholder.width()
     window.geometry(f"{width}x{width}")
@@ -60,6 +65,33 @@ def displaySearchResult(data):
     (width, height) = currentWindowSize()
     window.minsize(width, height)
     window.maxsize(int(width * 1.5), height * 2)
+
+
+def checkButtonList(master, names: set) -> ttk.Frame:
+    frame = ttk.Frame(master)
+
+    i = 0
+    for name in names:
+        name = str(name)
+        check = ttk.Checkbutton(frame, text=name)
+        
+        # 'lambda n=name:' 구문: 현재 name 값을 n값으로 '즉시' 캡쳐
+        # 즉시 캡쳐하지 않을 경우 lambda 표현식은 해당 변수를 '호출 시점'에 참조하므로 의도가 달라짐.
+        check.configure(command=lambda n=name: listPushOrPop(n))
+        check.state(['!alternate'])
+        check.grid(column=0, row=i, sticky=W, pady=1)
+        i += 1
+
+
+    def listPushOrPop(name: str):
+        if name in names:
+            names.remove(name)
+        else:
+            names.add(name)
+
+
+    names.clear()
+    return frame
 
 
 def currentWindowSize() -> (int, int):
@@ -87,6 +119,14 @@ if __name__ == '__main__':
     map = ttk.Label(mainframe, image=map_placeholder)
     map.grid(column=0, row=0, sticky=N)
     mainframe.rowconfigure(0, weight=0)
+
+    questionLabel = ttk.Label(mainframe)
+    questionLabel.configure(text="지금 어떤 종류의 음식을 원하시나요?")
+    questionLabel.grid(column=0, row=0, sticky=[W, N])
+
+    preference = {"중식", "일식", "한식", "간식", "휴식"}
+    foodCategoryCheckButtons = checkButtonList(mainframe, preference)
+    foodCategoryCheckButtons.grid(column=0, row=1, sticky=[W, N], pady=(10, 30))
 
     # give some placeholder item to the list
     item = ListItem(mainframe, "name", "distance", "time", 5)
