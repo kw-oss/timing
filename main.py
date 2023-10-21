@@ -2,8 +2,6 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 
-# TODO: Add main window with button for running restorant searching algorithm and showing the result in the list
-
 class ListItem(ttk.Frame):
     def __init__(self, mainframe, name, distance, time, rating):
         ttk.Frame.__init__(self, mainframe)
@@ -34,40 +32,89 @@ class ListItem(ttk.Frame):
         self.time_label      .grid(column=0, row=2, columnspan=2, sticky=W)
         self.rating_label    .grid(column=1, row=2, sticky=W)
         
+def mainButtonPressed():
+    # put some search result to `data`
+    data = None
+    displaySearchResult(data)
+
+
+def displaySearchResult(data):
+    # prevents displaying large window bigger than minsize
+    width = map_placeholder.width()
+    window.geometry(f"{width}x{width}")
+    # this will re-enable auto-resizing by systems when widgets are restored 
+    window.geometry("") 
+
+    # restore searched result UI layout
+    mainframe.configure(padding=5)
+    map.grid()
+    item.grid()
+    mainframe.rowconfigure(1, weight=1)
+    buttomBar.grid()
+    
+    # change some layout configuration of runButton
+    runButton.grid(sticky=S)
+    mainframe.rowconfigure(3, weight=0)
+
+    # set the window's size to fit the initial content
+    (width, height) = currentWindowSize()
+    window.minsize(width, height)
+    window.maxsize(int(width * 1.5), height * 2)
+
+
+def currentWindowSize() -> (int, int):
+    window.update()
+    width = window.winfo_width()
+    height = window.winfo_height()
+    return (width, height)
+
 
 if __name__ == '__main__':
     window = Tk()
     window.title("Result")
-
-    # placeholder image for map area
-    map_placeholder = ImageTk.PhotoImage(Image.open('image_placeholder.png'))
 
     # sticky == alignment(stick or fill)
     # column/rowconfigure(column/row_index, weight, minsize, pad(=padding))
     # weight == 0 means fixed, weight > 0 means expandable, each weight is a ratio with other widget's weight
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
-    mainframe = ttk.Frame(window, padding=5)
-    mainframe.grid(column=0, row=0, sticky=(N, W, E, S)) # positioning to its parent
-    
+    mainframe = ttk.Frame(window, padding=50)
+    mainframe.grid(column=0, row=0, sticky=(N, W, E, S)) # fill its parent    
     mainframe.columnconfigure(0, weight=1) # setting inner grid
-    mainframe.rowconfigure(0, weight=0)
 
+    # placeholder image for map area
+    map_placeholder = ImageTk.PhotoImage(Image.open('image_placeholder.png'))
     map = ttk.Label(mainframe, image=map_placeholder)
     map.grid(column=0, row=0, sticky=N)
+    mainframe.rowconfigure(0, weight=0)
 
     # give some placeholder item to the list
     item = ListItem(mainframe, "name", "distance", "time", 5)
     item.grid(column=0, row=1, sticky=[W, N])
-    mainframe.rowconfigure(1, weight=1)
+    mainframe.rowconfigure(1, weight=0)
 
-    # TODO: define list's scrollbar, and present the list with scrollbar
+    map.grid_remove()
+    item.grid_remove()
+
+    buttomBar = ttk.Separator(mainframe, orient='horizontal')
+    buttomBar.grid(column=0, row=2, sticky=[E, W])
+    buttomBar.grid_remove()
+
+    runButton = ttk.Button(mainframe)
+    runButton.config(text="Run")
+    runButton.config(command=mainButtonPressed)
+    
+    runButton.grid(column=0, row=3, sticky=[N, E, S, W])
+    mainframe.rowconfigure(2, weight=0)
+    mainframe.rowconfigure(3, weight=1)
+
+    # TODO: define list's scrollbar, and present the list with scrollbar(replace item to list)
     # reference: 
     # https://stackoverflow.com/questions/3085696/adding-a-scrollbar-to-a-group-of-widgets-in-tkinter
     # https://blog.teclado.com/tkinter-scrollable-frames/
 
     # set the window's size to fit the initial content
-    window.update()
-    window.minsize(window.winfo_width(), window.winfo_height())
+    (width, height) = currentWindowSize()
+    window.minsize(width, height)
 
     window.mainloop()
