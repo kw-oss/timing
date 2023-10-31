@@ -2,6 +2,36 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 
+# TODO: scrolling via mouse wheel
+# TODO: auto hiding scrollbar when not needed
+# TODO: set maximum size of the window to not exceed the screen size 
+#       (max size is only updated when the content is changed)
+class ScrollableFrame(ttk.Frame):
+    def __init__(self, container, *args, **kwargs):
+        super().__init__(container, *args, **kwargs)
+        self.canvas = Canvas(self)
+        self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.scrollable_frame = ttk.Frame(self.canvas)
+
+        # <Configure> event
+        # triggered whenever its size, position, or border width changes, and sometimes when it has changed position in the stacking order.
+        self.scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
+            )
+        )
+
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.canvas.grid(row=0, column=0, sticky="nsw")
+        self.scrollbar.grid(row=0, column=1, sticky="ens")
+    
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
+
 class ListItem(ttk.Frame):
     def __init__(self, mainframe, name, distance, time, rating):
         ttk.Frame.__init__(self, mainframe)
@@ -53,7 +83,7 @@ def displaySearchResult(data):
     # restore searched result UI layout
     mainframe.configure(padding=5)
     map.grid()
-    item.grid()
+    listframe.grid()
     mainframe.rowconfigure(1, weight=1)
     buttomBar.grid()
     
@@ -128,18 +158,21 @@ if __name__ == '__main__':
     foodCategoryCheckButtons = checkButtonList(mainframe, preference)
     foodCategoryCheckButtons.grid(column=0, row=1, sticky=[W, N], pady=(10, 30))
 
-    # give some placeholder item to the list
-    item = ListItem(mainframe, "name", "distance", "time", 5)
-    item.grid(column=0, row=1, sticky=[W, N])
-    mainframe.rowconfigure(1, weight=0)
+    listframe = ScrollableFrame(mainframe)
+    listframe.grid(column=0, row=1, sticky=(N, W, E, S))
 
+    # give some placeholder item to the list
+    for i in range(10):
+        listitem = ListItem(listframe.scrollable_frame, "name", "distance", "time", 5)
+        listitem.grid(column=0, row=i, sticky=[W, N])
+        listframe.scrollable_frame.rowconfigure(i, weight=0)
 
     buttomBar = ttk.Separator(mainframe, orient='horizontal')
     buttomBar.grid(column=0, row=2, sticky=[E, W])
     mainframe.rowconfigure(2, weight=0)
 
     map.grid_remove()
-    item.grid_remove()
+    listframe.grid_remove()
     buttomBar.grid_remove()
 
     runButton = ttk.Button(mainframe)
@@ -148,11 +181,6 @@ if __name__ == '__main__':
     
     runButton.grid(column=0, row=3, sticky=[N, E, S, W])
     mainframe.rowconfigure(3, weight=1)
-
-    # TODO: define list's scrollbar, and present the list with scrollbar(replace item to list)
-    # reference: 
-    # https://stackoverflow.com/questions/3085696/adding-a-scrollbar-to-a-group-of-widgets-in-tkinter
-    # https://blog.teclado.com/tkinter-scrollable-frames/
 
     # set the window's size to fit the initial content
     (width, height) = currentWindowSize()
