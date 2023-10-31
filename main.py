@@ -133,11 +133,13 @@ if __name__ == '__main__':
     item.grid(column=0, row=1, sticky=[W, N])
     mainframe.rowconfigure(1, weight=0)
 
-    map.grid_remove()
-    item.grid_remove()
 
     buttomBar = ttk.Separator(mainframe, orient='horizontal')
     buttomBar.grid(column=0, row=2, sticky=[E, W])
+    mainframe.rowconfigure(2, weight=0)
+
+    map.grid_remove()
+    item.grid_remove()
     buttomBar.grid_remove()
 
     runButton = ttk.Button(mainframe)
@@ -145,7 +147,6 @@ if __name__ == '__main__':
     runButton.config(command=mainButtonPressed)
     
     runButton.grid(column=0, row=3, sticky=[N, E, S, W])
-    mainframe.rowconfigure(2, weight=0)
     mainframe.rowconfigure(3, weight=1)
 
     # TODO: define list's scrollbar, and present the list with scrollbar(replace item to list)
