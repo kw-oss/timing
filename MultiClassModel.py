@@ -70,9 +70,22 @@ class MultiClassModel:
 
 if __name__ == "__main__":
     # 예제 데이터 셋
-    iris = datasets.load_iris()
-    X = iris.data
-    y = iris.target
+    # iris = datasets.load_iris()
+    # X = iris.data
+    # y = iris.target
+
+    # 실제 데이터
+    df = pd.read_csv('preferences.csv', encoding = 'cp949')
+    X = df[['기온', '거리', '선호도']]
+    y = df['음식']
+    X = df[['기온', '거리', '선호도']].values
+    y = df['음식'].values
+
+    # LabelEncoder 초기화
+    label_encoder = LabelEncoder()
+
+    # 레이블 인코딩 수행
+    y = label_encoder.fit_transform(y)
 
     # 모델 인스턴스 생성
     model = MultiClassModel(input_dim=X.shape[1], output_dim=3)
