@@ -12,4 +12,5 @@ m = folium.Map(location=[lat, lon],
                height=500
             )
 
+
 m.save('map.html')
