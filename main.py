@@ -214,7 +214,7 @@ if __name__ == '__main__':
     question_label.grid(column=0, row=0, sticky=[W, N])
 
     score_kinds = ["싫어함", "별로", "그럭저럭", "좋아함", "땡김"]
-    food_kinds = ["중식", "일식", "한식", "디저트"]
+    food_kinds = ["고기&구이", "면", "백반&죽", "패스트푸드"]
     survey = SurveySet(mainframe, score_names=score_kinds, subtitles=food_kinds)
     survey.grid(column=0, row=1, sticky=(N, W, E, S), pady=(10, 30))
 
