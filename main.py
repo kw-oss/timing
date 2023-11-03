@@ -155,7 +155,7 @@ def displaySearchResult(data):
     mainframe.rowconfigure(2, weight=0)
     
     # change some layout configuration of runButton
-    runButton.grid(sticky=S)
+    buttomArea.columnconfigure(1, weight=0)
     mainframe.rowconfigure(3, weight=0)
 
     # set the window's size to fit the initial content
@@ -218,13 +218,23 @@ if __name__ == '__main__':
     survey = SurveySet(mainframe, score_names=score_kinds, subtitles=food_kinds)
     survey.grid(column=0, row=1, sticky=(N, W, E, S), pady=(10, 30))
 
-    runButton = ttk.Button(mainframe)
-    runButton.config(text="Run")
-    runButton.config(command=mainButtonPressed)
-    
-    runButton.grid(column=0, row=3, sticky=[N, E, S, W])
+    # runButton wrapper for dynamic padding
+    buttomArea = ttk.Frame(mainframe)
+    buttomArea.grid(column=0, row=3, sticky=[N, E, S, W])
+    buttomArea.columnconfigure(0, weight=2)
+    buttomArea.columnconfigure(1, weight=1) # runButton column
+    buttomArea.columnconfigure(2, weight=2)
+    buttomArea.rowconfigure(0, weight=1)
+    buttomArea.rowconfigure(1, weight=1) # runButton row
+    buttomArea.rowconfigure(2, weight=2)
+
     mainframe.rowconfigure(3, weight=2)
 
+    runButton = ttk.Button(buttomArea)
+    runButton.config(text="맛집 찾기")
+    runButton.config(command=mainButtonPressed)
+    runButton.grid(column=1, row=1, sticky=[N, E, S, W])
+    
     # set the window's size to fit the initial content
     (width, height) = currentWindowSize()
     window.minsize(width, height)
