@@ -11,7 +11,6 @@ import pandas as pd
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 # 크롬 창이 안 뜨도록 옵션 설정
 #options = Options()
 #options.add_argument('--headless')
