@@ -69,23 +69,41 @@ class MultiClassModel:
             print("Train Falied.")
 
 if __name__ == "__main__":
+    # 합칠 때, UI에서 선호도 가져오면 됩니다.
+    Meat_pre = 1
+    Noodle_pre = 2
+    Rice_pre = 3
+    FastFood_pre = 4
+
+    # map에서 따온 정보들 저장한 csv
+    placesDF = pd.read_csv('preference.csv', encoding = 'cp949')
+
+    Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두']
+    Noodle = ['중식당', '국수', '아시아음식', '우동,소바']
+    Rice = ['죽', '한식', '보리밥', '국밥', '김밥', '감자탕', '한정식', '백반,가정식']
+    FastFood = ['햄버거', '베이커리', '피자']
+
+    preference_dict = {
+        'Meat': Meat,
+        'Noodle': Noodle,
+        'Rice': Rice,
+        'FastFood': FastFood
+    }
+
+    # '선호도' 열을 추가하고 초기값을 0으로 설정
+    placesDF['선호도'] = 0
+
+    # '종류' 열을 기반으로 '선호도' 값을 업데이트
+    for category, preferences in preference_dict.items():
+        placesDF.loc[placesDF['종류'].isin(preferences), '선호도'] = placesDF['선호도'] + int(list(preference_dict.keys()).index(category)) + 1
+
+
+
+    '''
     # 예제 데이터 셋
-    # iris = datasets.load_iris()
-    # X = iris.data
-    # y = iris.target
-
-    # 실제 데이터
-    df = pd.read_csv('preferences.csv', encoding = 'cp949')
-    X = df[['기온', '거리', '선호도']]
-    y = df['음식']
-    X = df[['기온', '거리', '선호도']].values
-    y = df['음식'].values
-
-    # LabelEncoder 초기화
-    label_encoder = LabelEncoder()
-
-    # 레이블 인코딩 수행
-    y = label_encoder.fit_transform(y)
+    iris = datasets.load_iris()
+    X = iris.data
+    y = iris.target
 
     # 모델 인스턴스 생성
     model = MultiClassModel(input_dim=X.shape[1], output_dim=3)
@@ -98,3 +116,4 @@ if __name__ == "__main__":
 
     # 훈련 히스토리 시각화
     model.plot_training_history()
+    '''
