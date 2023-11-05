@@ -2,10 +2,10 @@ from tkinter import ttk, Tk
 from tkinter.constants import *
 from PIL import ImageTk, Image
 
-from survey import SurveySet
+from surveyWidget import SurveySet
 from loadingDialog import LoadingDialog
 from scrollableWidget import ScrollableFrame
-from restaurantItem import ListItem
+from restaurantItemWidget import ListItem
 
 def mainButtonPressed():
     # put some search result to `data`
