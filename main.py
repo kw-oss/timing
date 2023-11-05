@@ -114,7 +114,8 @@ class AutoHidingScrollbar(ttk.Scrollbar):
         Scrollbar.set(self, low, high)
 
     def _on_mousewheel(self, event):
-        self.canvas.yview_scroll(-1 * int(event.delta/120), "units")
+        scroll_speed = 20
+        self.container.canvas.yview_scroll(-1 * int(event.delta/120) * scroll_speed, "units")
 
 
 class ScrollableFrame(ttk.Frame):
@@ -136,6 +137,7 @@ class ScrollableFrame(ttk.Frame):
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.configure(yscrollincrement='1') # prevent dynamic scroll speed based on content size
 
         self.canvas.grid(row=0, column=0, sticky="nsw")
         self.scrollbar.grid(row=0, column=1, sticky="ens")
