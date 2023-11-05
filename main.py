@@ -99,7 +99,6 @@ class RadioSet:
             
             self.radio.append(new_radio)
 
-# TODO: scrolling via mouse wheel
 # TODO: auto hiding scrollbar when not needed
 # TODO: set maximum size of the window to not exceed the screen size 
 #       (max size is only updated when the content is changed)
@@ -119,6 +118,8 @@ class ScrollableFrame(ttk.Frame):
             )
         )
 
+        self.scrollable_frame.bind_all("<MouseWheel>", self._on_mousewheel)
+
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
@@ -128,6 +129,9 @@ class ScrollableFrame(ttk.Frame):
     
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
+
+    def _on_mousewheel(self, event):
+        self.canvas.yview_scroll(-1 * int(event.delta/120), "units")
 
 class ListItem(ttk.Frame):
     def __init__(self, mainframe, name, distance, time, rating):
