@@ -206,7 +206,8 @@ def displaySearchResult(data):
     window.geometry("") 
 
     # restore searched result UI layout
-    mainframe.configure(padding=5)
+    mainframe_padding = 5
+    mainframe.configure(padding=mainframe_padding)
     map.grid()
     listframe.grid()
     mainframe.rowconfigure(1, weight=1)
@@ -218,10 +219,10 @@ def displaySearchResult(data):
     buttomArea.columnconfigure(1, weight=0)
     mainframe.rowconfigure(3, weight=0)
 
-    # set the window's size to fit the initial content
-    (width, height) = currentWindowSize()
-    window.minsize(width, height)
-    window.maxsize(int(width * 1.5), height * 2)
+    # set window's minimum size
+    min_height = map.winfo_reqheight() + listitem.winfo_reqheight() + buttomBar.winfo_reqheight() + buttomArea.winfo_reqheight() + mainframe_padding * 2
+    min_width = map.winfo_reqwidth() + mainframe_padding * 2
+    window.minsize(min_width, min_height)
 
 
 def currentWindowSize() -> (int, int):
@@ -235,12 +236,14 @@ if __name__ == '__main__':
     window = Tk()
     window.title("Result")
 
+    mainframe_padding = 50
+
     # sticky == alignment(stick or fill)
     # column/rowconfigure(column/row_index, weight, minsize, pad(=padding))
     # weight == 0 means fixed, weight > 0 means expandable, each weight is a ratio with other widget's weight
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
-    mainframe = ttk.Frame(window, padding=50)
+    mainframe = ttk.Frame(window, padding=mainframe_padding)
     mainframe.grid(column=0, row=0, sticky=(N, W, E, S)) # fill its parent    
     mainframe.columnconfigure(0, weight=1) # setting inner grid
 
