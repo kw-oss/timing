@@ -99,14 +99,22 @@ class RadioSet:
             
             self.radio.append(new_radio)
 
-# TODO: auto hiding scrollbar when not needed
+class AutoHidingScrollbar(ttk.Scrollbar):
+    def set(self, low, high):
+        if float(low) <= 0.0 and float(high) >= 1.0:
+            self.grid_remove()
+        else:
+            self.grid()
+        Scrollbar.set(self, low, high)
+
+
 # TODO: set maximum size of the window to not exceed the screen size 
 #       (max size is only updated when the content is changed)
 class ScrollableFrame(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
         self.canvas = Canvas(self)
-        self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.scrollbar = AutoHidingScrollbar(self, orient="vertical", command=self.canvas.yview)
         self.scrollable_frame = ttk.Frame(self.canvas)
 
         # <Configure> event
