@@ -255,7 +255,8 @@ if __name__ == '__main__':
     mainframe.rowconfigure(1, weight=1)
 
     # give some placeholder item to the list
-    for i in range(10):
+    item_count = 5
+    for i in range(item_count):
         listitem = ListItem(listframe.scrollable_frame, "name", "distance", "time", 5)
         listitem.grid(column=0, row=i, sticky=[W, N])
         listframe.scrollable_frame.rowconfigure(i, weight=0)
