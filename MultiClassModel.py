@@ -95,8 +95,15 @@ if __name__ == "__main__":
 
     # '종류' 열을 기반으로 '선호도' 값을 업데이트
     for category, preferences in preference_dict.items():
-        placesDF.loc[placesDF['종류'].isin(preferences), '선호도'] = placesDF['선호도'] + int(list(preference_dict.keys()).index(category)) + 1
+        placesDF.loc[placesDF['종류'].isin(preferences), '선호도'] = placesDF['선호도'] + {
+        'Meat': Meat_pre,
+        'Noodle': Noodle_pre,
+        'Rice': Rice_pre,
+        'FastFood': FastFood_pre
+    }[category]
 
+    X = placesDF[['별점', '리뷰', '선호도']].values   # 거리 추가해야 함 
+    y = placesDF['순위'].values
 
 
     '''
