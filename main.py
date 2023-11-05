@@ -100,16 +100,23 @@ class RadioSet:
             self.radio.append(new_radio)
 
 class AutoHidingScrollbar(ttk.Scrollbar):
+    def __init__(self, container, *args, **kwargs):
+        super().__init__(container, *args, **kwargs)
+        self.container = container
+
     def set(self, low, high):
         if float(low) <= 0.0 and float(high) >= 1.0:
             self.grid_remove()
+            self.container.canvas.unbind_all("<MouseWheel>")
         else:
             self.grid()
+            self.container.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
         Scrollbar.set(self, low, high)
 
+    def _on_mousewheel(self, event):
+        self.canvas.yview_scroll(-1 * int(event.delta/120), "units")
 
-# TODO: set maximum size of the window to not exceed the screen size 
-#       (max size is only updated when the content is changed)
+
 class ScrollableFrame(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
@@ -126,8 +133,6 @@ class ScrollableFrame(ttk.Frame):
             )
         )
 
-        self.scrollable_frame.bind_all("<MouseWheel>", self._on_mousewheel)
-
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
@@ -137,9 +142,6 @@ class ScrollableFrame(ttk.Frame):
     
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
-
-    def _on_mousewheel(self, event):
-        self.canvas.yview_scroll(-1 * int(event.delta/120), "units")
 
 class ListItem(ttk.Frame):
     def __init__(self, mainframe, name, distance, time, rating):
