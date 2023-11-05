@@ -1,7 +1,40 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, simpledialog
 from PIL import ImageTk, Image
 from typing import List, Dict
+
+class LoadingDialog(simpledialog.Dialog):
+    def body(self, master):
+        self.text = StringVar(self, value="Loading...")
+        self.label = ttk.Label(master, textvariable=self.text)
+        self.label.grid(padx=10, pady=10)
+
+        self.resizable(False, False)
+        self.geometry("130x50")
+        
+        self.refresh()
+        
+        # temporary - auto destroy after 3 seconds
+        self.after(3000, self.destroy)
+
+    def refresh(self):
+        if self.text.get().count(".") < 3:
+            self.text.set(self.text.get() + ".")
+        else:
+            self.text.set("Loading")
+
+        self.after(500, self.refresh)
+
+    # remove default button
+    def buttonbox(self):
+        pass
+
+    def cancel(self):
+        # cancel main button task
+        global is_canceled
+        is_canceled = True
+
+        super().cancel()
 
 class SurveySet(ttk.Frame):
     # creates a questionaire in tabular form, with given score names and subtitles
@@ -129,10 +162,21 @@ class ListItem(ttk.Frame):
 def mainButtonPressed():
     # put some search result to `data`
     data = None
-    displaySearchResult(data)
+
+    # run the search algorithm here
+    # TODO: run as background task(thread non-blocking)
     for key, value in survey.answers.items():
         print(key, value.get(), sep=": ")
 
+    global is_canceled
+    is_canceled = False
+
+    dialog = LoadingDialog(window, title="Loading")
+    
+    if is_canceled:
+        return
+
+    displaySearchResult(data)
 
 def displaySearchResult(data):
     # hide question label
