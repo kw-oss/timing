@@ -1,179 +1,11 @@
-from tkinter import *
-from tkinter import ttk, simpledialog
+from tkinter import ttk, Tk
+from tkinter.constants import *
 from PIL import ImageTk, Image
-from typing import List, Dict
 
-class LoadingDialog(simpledialog.Dialog):
-    def body(self, master):
-        self.text = StringVar(self, value="Loading...")
-        self.label = ttk.Label(master, textvariable=self.text)
-        self.label.grid(padx=10, pady=10)
-
-        self.resizable(False, False)
-        self.geometry("130x50")
-        
-        self.refresh()
-        
-        # temporary - auto destroy after 3 seconds
-        self.after(3000, self.destroy)
-
-    def refresh(self):
-        if self.text.get().count(".") < 3:
-            self.text.set(self.text.get() + ".")
-        else:
-            self.text.set("Loading")
-
-        self.after(500, self.refresh)
-
-    # remove default button
-    def buttonbox(self):
-        pass
-
-    def cancel(self):
-        # cancel main button task
-        global is_canceled
-        is_canceled = True
-
-        super().cancel()
-
-class SurveySet(ttk.Frame):
-    # creates a questionaire in tabular form, with given score names and subtitles
-    def __init__(self, container, score_names: List[int], subtitles: List[str], *args, **kwargs):
-        super().__init__(container, *args, **kwargs)
-        # instance members
-        self.score_labels: [ttk.Label] = []
-        self.radio_sets: List[RadioSet] = []
-        self.answers: Dict[str, IntVar] = {}
-
-        # set default value of answers, and initialize self.answers
-        default_value = (len(score_names) - 1) // 2
-        for subtitle in subtitles:
-            self.answers[subtitle] = IntVar(self, value=default_value)
-
-        # set score_label row
-        for i, score_name in enumerate(score_names):
-            # workaround for radio button's misalignment to center
-            score_name += " "
-
-            new_label = ttk.Label(self, text=score_name)
-            new_label.grid(column=i+1, row=0)
-            
-            self.score_labels.append(new_label)
-
-        # set radio_set rows
-        for i, subtitle in enumerate(subtitles):
-            new_radioset = RadioSet(self, pos=(0, i+1), title=subtitle, radio_count=len(score_names), variable=self.answers[subtitle])
-
-            self.radio_sets.append(new_radioset)
-
-        # set column weight
-        self.columnconfigure(0, weight=0)
-        for i in range(len(score_names)):
-            # uniform: share common width between columns that has same key str
-            self.columnconfigure(i+1, weight=2, uniform="radio set")
-
-        # set row weight
-        for i in range(len(subtitles)):
-            self.rowconfigure(i+1, weight=2)
-
-class RadioSet:
-    # create and attach a label and number of radio button to container, start at given position
-    def __init__(self, container, pos: (int, int), title: str, radio_count: int, variable: IntVar, *args, **kwargs):
-        # instance members
-        self.radio: List[ttk.Radiobutton] = []
-        self.label: ttk.Label
-        self.variable = variable
-        
-        (col, row) = pos
-        
-        # set title label
-        self.label = ttk.Label(container, text=title)
-        self.label.grid(column=col, row=row, sticky=E, padx=(0, 10))
-
-        # set radio buttons
-        for i in range(radio_count):
-            col += 1
-        
-            new_radio = ttk.Radiobutton(container, text="", value=i, variable=self.variable)
-            new_radio.grid(column=col, row=row)
-            
-            self.radio.append(new_radio)
-
-class AutoHidingScrollbar(ttk.Scrollbar):
-    def __init__(self, container, *args, **kwargs):
-        super().__init__(container, *args, **kwargs)
-        self.container = container
-
-    def set(self, low, high):
-        if float(low) <= 0.0 and float(high) >= 1.0:
-            self.grid_remove()
-            self.container.canvas.unbind_all("<MouseWheel>")
-        else:
-            self.grid()
-            self.container.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
-        Scrollbar.set(self, low, high)
-
-    def _on_mousewheel(self, event):
-        scroll_speed = 20
-        self.container.canvas.yview_scroll(-1 * int(event.delta/120) * scroll_speed, "units")
-
-
-class ScrollableFrame(ttk.Frame):
-    def __init__(self, container, *args, **kwargs):
-        super().__init__(container, *args, **kwargs)
-        self.canvas = Canvas(self)
-        self.scrollbar = AutoHidingScrollbar(self, orient="vertical", command=self.canvas.yview)
-        self.scrollable_frame = ttk.Frame(self.canvas)
-
-        # <Configure> event
-        # triggered whenever its size, position, or border width changes, and sometimes when it has changed position in the stacking order.
-        self.scrollable_frame.bind(
-            "<Configure>",
-            lambda e: self.canvas.configure(
-                scrollregion=self.canvas.bbox("all")
-            )
-        )
-
-        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.canvas.configure(yscrollincrement='1') # prevent dynamic scroll speed based on content size
-
-        self.canvas.grid(row=0, column=0, sticky="nsw")
-        self.scrollbar.grid(row=0, column=1, sticky="ens")
-    
-        self.rowconfigure(0, weight=1)
-        self.columnconfigure(0, weight=1)
-
-class ListItem(ttk.Frame):
-    def __init__(self, mainframe, name, distance, time, rating):
-        ttk.Frame.__init__(self, mainframe)
-        self.name        = StringVar(self, value=name)
-        self.distance    = StringVar(self, value=distance)
-        self.time        = StringVar(self, value=time)
-        self.rating      = DoubleVar(self, value=rating)
-        # self.photo = photo
-        self.initUI()
-
-    def initUI(self):
-        self.style = ttk.Style()
-        self.style.configure("Title.TLabel", font=("Consolas", 12, "bold"))
-        self.style.configure("Detail.TLabel", font=("Consolas", 10, "normal"))
-
-        self.name_label      = ttk.Label(self, textvariable=self.name,       style="Title.TLabel")
-        self.distance_label  = ttk.Label(self, textvariable=self.distance,   style="Detail.TLabel")
-        self.time_label      = ttk.Label(self, textvariable=self.time,       style="Detail.TLabel")
-        self.rating_label    = ttk.Label(self, textvariable=self.rating,     style="Detail.TLabel")
-        
-        self.name_label      .configure(style="Title.TLabel")
-        self.distance_label  .configure(style="Detail.TLabel")
-        self.time_label      .configure(style="Detail.TLabel")
-        self.rating_label    .configure(style="Detail.TLabel")
-
-        self.name_label      .grid(column=0, row=0, columnspan=2, sticky=W)
-        self.distance_label  .grid(column=0, row=1, columnspan=2, sticky=W)
-        self.time_label      .grid(column=0, row=2, columnspan=2, sticky=W)
-        self.rating_label    .grid(column=1, row=2, sticky=W)
+from survey import SurveySet
+from loadingDialog import LoadingDialog
+from scrollableWidget import ScrollableFrame
+from restaurantItem import ListItem
 
 def mainButtonPressed():
     # put some search result to `data`
@@ -184,12 +16,10 @@ def mainButtonPressed():
     for key, value in survey.answers.items():
         print(key, value.get(), sep=": ")
 
-    global is_canceled
-    is_canceled = False
-
-    dialog = LoadingDialog(window, title="Loading")
+    task_canceled = [False]
+    dialog = LoadingDialog(window, task_canceled, title="Loading")
     
-    if is_canceled:
+    if task_canceled[0]:
         return
 
     displaySearchResult(data)
