@@ -5,7 +5,6 @@ from tensorflow import keras
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
-import matplotlib.pyplot as plt
 from sklearn import datasets
 
 # File I/O 를 위한 Library
@@ -50,8 +49,8 @@ if __name__ == "__main__":
     Rice_pre = 3
     FastFood_pre = 4
 
-    # map에서 따온 정보들 저장한 csv
-    placesDF = pd.read_csv('preference.csv', encoding = 'cp949')
+    # train_data 읽어오기
+    TrainDF = pd.read_csv('train_data.csv', encoding = 'cp949')
 
     Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두']
     Noodle = ['중식당', '국수', '아시아음식', '우동,소바']
@@ -65,20 +64,24 @@ if __name__ == "__main__":
         'FastFood': FastFood
     }
 
-    # '선호도' 열을 추가하고 초기값을 0으로 설정
-    placesDF['선호도'] = 0
+    # '선호도' 열을 추가하고 초기값을 3(중간)으로 설정
+    TrainDF['선호도'] = 3
 
     # '종류' 열을 기반으로 '선호도' 값을 업데이트
     for category, preferences in preference_dict.items():
-        placesDF.loc[placesDF['종류'].isin(preferences), '선호도'] = placesDF['선호도'] + {
+        TrainDF.loc[TrainDF['종류'].isin(preferences), '선호도'] = TrainDF['선호도'] + {
         'Meat': Meat_pre,
         'Noodle': Noodle_pre,
         'Rice': Rice_pre,
         'FastFood': FastFood_pre
     }[category]
+        
+    # 사용자의 음식 선호도에 맞게 TrianData를 학습시키기 위해서 추가하는 공식
+    TrainDF['추천율'] = 0
+    TrainDF['추천율'] = TrainDF['별점'].values * TrainDF['선호도'] + (TrainDF['리뷰'].values * 0.01)
 
-    X = placesDF[['별점', '리뷰', '선호도']].values   # 거리 추가해야 함 
-    y = placesDF['추천율'].values
+    X = TrainDF[['별점', '리뷰', '선호도']].values   # 거리 추가해야 함 
+    y = TrainDF['추천율'].values
 
     # 모델 생성
     model = RecommendationModel()
@@ -88,10 +91,10 @@ if __name__ == "__main__":
     Predict_data = model.predict(X)
 
     # 실제 데이터프레임(placesDF 말고)에서 '추천율' coliumn을 생성한 후에 예측한 추천율을 넣어놓습니다.
-    placesDF['추천율'] = 0
-    placesDF['추천율'] = Predict_data
+    TrainDF['추천율'] = 0
+    TrainDF['추천율'] = Predict_data
 
     # 추천율을 기준으로 정렬합니다. (추천율이 높은 순서대로 하기위해서 ascending = False를 사용했습니다.)
-    placesDF.sort_values('추천율', ascending = False)
+    TrainDF.sort_values('추천율', ascending = False)
 
-    print(placesDF)
+    print(TrainDF)
