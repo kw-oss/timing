@@ -52,10 +52,10 @@ if __name__ == "__main__":
     # train_data 읽어오기
     TrainDF = pd.read_csv('train_data.csv', encoding = 'cp949')
 
-    Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두']
-    Noodle = ['중식당', '국수', '아시아음식', '우동,소바']
-    Rice = ['죽', '한식', '보리밥', '국밥', '김밥', '감자탕', '한정식', '백반,가정식']
-    FastFood = ['햄버거', '베이커리', '피자']
+    Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두', '닭요리']
+    Noodle = ['중식당', '국수', '아시아음식', '우동,소바', '샤브샤브']
+    Rice = ['죽', '한식', '보리밥', '국밥', '김밥', '감자탕', '한정식', '백반,가정식', '곰탕,설렁탕']
+    FastFood = ['햄버거', '베이커리', '피자', '카페', '카페,디저트']
 
     preference_dict = {
         'Meat': Meat,
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     # '종류' 열을 기반으로 '선호도' 값을 업데이트
     for category, preferences in preference_dict.items():
-        TrainDF.loc[TrainDF['종류'].isin(preferences), '선호도'] = TrainDF['선호도'] + {
+        TrainDF.loc[TrainDF['종류'].isin(preferences), '선호도'] = {
         'Meat': Meat_pre,
         'Noodle': Noodle_pre,
         'Rice': Rice_pre,
@@ -87,14 +87,26 @@ if __name__ == "__main__":
     model = RecommendationModel()
     model.train(X, y)
 
-    # 여기 X에는 실제 데이터가 들어가야합니다! (지금은 잘 나오나 원래 데이터로 돌려봤어요.)
-    Predict_data = model.predict(X)
+    # 실제 음식점 목록 읽어오기
+    placesDF = pd.read_csv('naver_map_places.csv', encoding = 'cp949')
+    placesDF['선호도'] = 3
+    for category, preferences in preference_dict.items():
+        placesDF.loc[placesDF['종류'].isin(preferences), '선호도'] = {
+            'Meat': Meat_pre,
+            'Noodle': Noodle_pre,
+            'Rice': Rice_pre,
+            'FastFood': FastFood_pre
+        }[category]
+    realX = placesDF[['별점', '리뷰', '선호도']].values
 
-    # 실제 데이터프레임(placesDF 말고)에서 '추천율' coliumn을 생성한 후에 예측한 추천율을 넣어놓습니다.
-    TrainDF['추천율'] = 0
-    TrainDF['추천율'] = Predict_data
+    # 여기 X에는 실제 데이터가 들어가야합니다! (지금은 잘 나오나 원래 데이터로 돌려봤어요.)
+    Predict_data = model.predict(realX)
+
+    # 실제 데이터프레임(placesDF 말고)에서 '추천율' column을 생성한 후에 예측한 추천율을 넣어놓습니다.
+    placesDF['추천율'] = 0
+    placesDF['추천율'] = Predict_data
 
     # 추천율을 기준으로 정렬합니다. (추천율이 높은 순서대로 하기위해서 ascending = False를 사용했습니다.)
-    TrainDF.sort_values('추천율', ascending = False)
+    placesDF.sort_values('추천율', ascending = False)
 
     print(TrainDF)
