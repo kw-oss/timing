@@ -33,7 +33,7 @@ def restaurant_list():
     url = 'https://search.naver.com/search.naver?query=날씨'
     html = requests.get(url)
     soup = BeautifulSoup(html.text, 'html.parser')
-    myAddress = soup.find('div', {'class': 'title_area _area_panel'}).find('h2', {'class': 'title'}).text
+    #myAddress = soup.find('div', {'class': 'title_area _area_panel'}).find('h2', {'class': 'title'}).text
     
     
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
@@ -42,6 +42,7 @@ def restaurant_list():
     option = options.add_argument("headless")
     options.add_argument("disable-gpu")
     
+    myAddress = "노원구 광운로"
     url = f'https://map.kakao.com/?q={myAddress}+맛집'
     driver = webdriver.Chrome(options=option)
     driver.get(url)
