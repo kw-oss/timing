@@ -19,39 +19,58 @@ import pandas as pd
 import numpy as np
 
 def restaurant_list():
-    url = 'https://search.naver.com/search.naver?query=날씨'
-    html = requests.get(url)
-    soup = BeautifulSoup(html.text, 'html.parser')
+    
+    #csv파일에서 1행에 어떤 내용인지 기재
+    f = open('kakaoMap.csv', 'w', newline='')
+    writer = csv.writer(f)
+    writer.writerow(["이름", "별점", "주소", "영업시간", "카테고리", "별점 리뷰수", "블로그 리뷰수"])
+    f.close()
+    
+    
     
     #위치
     #위치 주소에 대한 html값을 찾아서 Address에 넣음
-    #myAddress = soup.find('div', {'class': 'title_area _area_panel'}).find('h2', {'class': 'title'}).text
-    
+    url = 'https://search.naver.com/search.naver?query=날씨'
+    html = requests.get(url)
+    soup = BeautifulSoup(html.text, 'html.parser')
     myAddress = soup.find('div', {'class': 'title_area _area_panel'}).find('h2', {'class': 'title'}).text
     
-    url = f'https://map.kakao.com/?q={myAddress}+치킨'
-    driver = webdriver.Chrome()
+    
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+    options = webdriver.ChromeOptions()
+    options.add_argument(f"user-agent = {user_agent}")
+    option = options.add_argument("headless")
+    options.add_argument("disable-gpu")
+    
+    url = f'https://map.kakao.com/?q={myAddress}+맛집'
+    driver = webdriver.Chrome(options=option)
     driver.get(url)
     
+    #식당 정보 얻어오는 코드
     restaurant = driver.find_elements(By.CLASS_NAME, 'link_name')
     star = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[4]/span[1]/em')
     address = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[5]/div[2]/p[1]')
     time = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[5]/div[3]/p/a')
-    #print(star[1].text)
-    #search_box.send_keys("노원구 광운로 피자")
-    #search_box.send_keys(Keys.ENTER)
-    
+    type = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[3]/span')
+    starReview = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[4]/span[1]/a')
+    blogReview = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[4]/a/em')
+
+
     size = len(restaurant)
+    print(size)
     
-    f = open('naver_map.csv', 'w', newline='')
+    #배열을 만들고 얻어온 내용을 대입
+    f = open('kakaoMap.csv', 'a', newline='')
     writer = csv.writer(f)
-    #List = []
+    #foodList = []
     for i in range(size):
         
-        writer.writerow([restaurant[i].text, star[i].text, address[i].text, time[i].text])
-        #List.append([restaurant[i].text, star[i].text])
-        
+        writer.writerow([restaurant[i].text, star[i].text, address[i].text, time[i].text, type[i].text, starReview[i].text, blogReview[i].text])
+        foodList.append([restaurant[i].text, star[i].text, address[i].text, time[i].text, type[i].text, starReview[i].text, blogReview[i].text])
     
     f.close()
-    
+    driver.close()
+
+foodList = []
 restaurant_list()
+print(foodList[1])
