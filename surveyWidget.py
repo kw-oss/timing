@@ -23,6 +23,7 @@ class SurveySet(ttk.Frame):
             score_name += " "
 
             new_label = ttk.Label(self, text=score_name)
+            new_label.configure(background='lightblue', foreground='black')
             new_label.grid(column=i+1, row=0)
             
             self.score_labels.append(new_label)
@@ -55,6 +56,7 @@ class RadioSet:
         
         # set title label
         self.label = ttk.Label(container, text=title)
+        self.label.configure(background='lightblue', foreground='black')
         self.label.grid(column=col, row=row, sticky=E, padx=(0, 10))
 
         # set radio buttons

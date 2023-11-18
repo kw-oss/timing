@@ -12,6 +12,8 @@ from mapList import restaurant_list
 
 import pandas as pd
 
+from ttkthemes import ThemedTk
+
 def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
     Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두', '닭요리',
             '육류,고기', '돈까스,우동', '해물,생선', '곱창,막창', '조개']
@@ -58,9 +60,15 @@ def ML(survey):
 
     # 모델 생성
     model = RecommendationModel()
-    model.train(X, y)
+    model.train(X, y, epochs = 100)
 
     placesDF = restaurant_list()
+
+    while(placesDF.empty):
+        print("다시 리스트 가져오는 중..")
+        placesDF = restaurant_list()
+
+
     placesDF = DataInit(placesDF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre)
 
     #print(placesDF)
@@ -118,11 +126,36 @@ def displaySearchResult(data):
     width = map_placeholder.width()
     window.geometry(f"{width}x{width}")
     # this will re-enable auto-resizing by systems when widgets are restored 
-    window.geometry("") 
+    window.geometry("")
 
     # give some placeholder item to the list
     #item_count = 5
     for i, (name, address, time, rate) in enumerate(zip(data['이름'], data['주소'], data['영업시간'], data['별점'])):
+
+        # ★☆ 별점 표시
+        if(rate >= 5):
+            rate = '별점 : ' + str(rate) + ' ★★★★★'
+        elif(rate >= 4):
+            rate = '별점 : ' + str(rate) + ' ★★★★☆'
+        elif(rate >= 3):
+            rate = '별점 : ' + str(rate) + ' ★★★☆☆'
+        elif(rate >= 2):
+            rate = '별점 : ' + str(rate) + ' ★★☆☆☆'
+        elif(rate >= 1):
+            rate = '별점 : ' + str(rate) + ' ★☆☆☆☆'
+        elif(rate >= 0):
+            rate = '별점 : ' + str(rate) + ' ☆☆☆☆☆'
+
+        if(len(address) == 0):
+            address = '주소 : 정보가 없습니다.'
+        else:
+            address = '주소 : ' + address
+
+        if(len(time) == 0):
+            time = '영업시간 : 정보가 없습니다.'
+        else:
+            time = '영업시간 : ' + time
+
         listitem = ListItem(listframe.scrollable_frame, name, address, time, rate)
         listitem.grid(column=0, row=i, sticky=[W, N])
         listframe.scrollable_frame.rowconfigure(i, weight=0)
@@ -155,7 +188,7 @@ def currentWindowSize() -> (int, int):
 
 
 if __name__ == '__main__':
-    window = Tk()
+    window =ThemedTk(theme = 'arc')
     window.title("Result")
 
     mainframe_padding = 50
@@ -169,11 +202,17 @@ if __name__ == '__main__':
     mainframe.grid(column=0, row=0, sticky=(N, W, E, S)) # fill its parent    
     mainframe.columnconfigure(0, weight=1) # setting inner grid
 
+    # 배경색 바꾸는 Style + 적용
+    style = ttk.Style()
+    style.configure('TFrame', background='lightblue')
+    mainframe.configure(style='TFrame')
+
     # placeholder image for map area
     map_placeholder = ImageTk.PhotoImage(Image.open('image_placeholder.png'))
     map = ttk.Label(mainframe, image=map_placeholder)
     map.grid(column=0, row=0, sticky=N)
     mainframe.rowconfigure(0, weight=0)
+    map.configure(background='lightblue')
 
     listframe = ScrollableFrame(mainframe)
     listframe.grid(column=0, row=1, sticky=(N, W, E, S))
@@ -194,15 +233,17 @@ if __name__ == '__main__':
     listframe.grid_remove()
     buttomBar.grid_remove()
 
-    question_text = "각 음식 종류별 선호도를 알려주세요."
+    question_text = "어떤 음식을 선호하시나요?"
     question_label = ttk.Label(mainframe)
     question_label.configure(text=question_text)
     question_label.grid(column=0, row=0, sticky=[W, N])
 
+    question_label.configure(background='lightblue', foreground='black', font=("Malgun Gothic", 12, "normal"))
+
     score_kinds = ["싫어함", "별로", "그럭저럭", "좋아함", "땡김"]
     food_kinds = ["고기&구이", "면", "백반&죽", "패스트푸드"]
     survey = SurveySet(mainframe, score_names=score_kinds, subtitles=food_kinds)
-    survey.grid(column=0, row=1, sticky=(N, W, E, S), pady=(10, 30))
+    survey.grid(column=0, row=1, sticky=(N, W, E, S), pady=(20, 30))
 
     # runButton wrapper for dynamic padding
     buttomArea = ttk.Frame(mainframe)

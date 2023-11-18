@@ -35,7 +35,7 @@ def restaurant_list():
 
     myAddress = "노원구 광운로"
     url = f'https://map.kakao.com/?q={myAddress}+맛집'
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(options=option)
     driver.get(url)
 
     #식당 정보 얻어오는 코드
