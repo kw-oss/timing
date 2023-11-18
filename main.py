@@ -6,6 +6,93 @@ from surveyWidget import SurveySet
 from loadingDialog import LoadingDialog
 from scrollableWidget import ScrollableFrame
 from restaurantItemWidget import ListItem
+from LinearModel import RecommendationModel
+from LinearModel import Extract_Numbers
+from mapList import restaurant_list
+
+import pandas as pd
+
+def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
+    Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두', '닭요리',
+            '육류,고기', '돈까스,우동', '해물,생선', '곱창,막창', '조개']
+    Noodle = ['중식당', '국수', '아시아음식', '우동,소바', '샤브샤브', '돈까스,우동', '이탈리안', '중식', '베트남음식', '분식', '양식']
+    Rice = ['죽', '한식', '보리밥', '국밥', '김밥', '감자탕', '한정식', '백반,가정식', '곰탕,설렁탕', '초밥,롤', '주먹밥']
+    FastFood = ['햄버거', '베이커리', '피자', '카페', '카페,디저트', '디저트카페', '샌드위치', '분식', '패스트푸드']
+
+    preference_dict = {
+        'Meat': Meat,
+        'Noodle': Noodle,
+        'Rice': Rice,
+        'FastFood': FastFood
+    }
+
+    DF['선호도'] = 3
+    for category, preferences in preference_dict.items():
+        DF.loc[DF['카테고리'].isin(preferences), '선호도'] = {
+            'Meat': Meat_pre,
+            'Noodle': Noodle_pre,
+            'Rice': Rice_pre,
+            'FastFood': FastFood_pre
+        }[category]
+
+    return DF
+
+def ML(survey):
+    ''' 추가한 부분 '''
+    
+    # 합칠 때, UI에서 선호도 가져오면 됩니다.
+    Meat_pre = survey.answers['고기&구이'].get()
+    Noodle_pre = survey.answers['면'].get()
+    Rice_pre = survey.answers['백반&죽'].get()
+    FastFood_pre = survey.answers['패스트푸드'].get()
+
+    TrainDF = pd.read_csv('train_data.csv', encoding = 'cp949')
+    TrainDF = DataInit(TrainDF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre)
+
+    # 사용자의 음식 선호도에 맞게 TrianData를 학습시키기 위해서 추가하는 공식
+    TrainDF['추천율'] = 0
+    TrainDF['추천율'] = TrainDF['별점'].values * TrainDF['선호도'] + (TrainDF['별점 리뷰수'].values * 0.01) + (TrainDF['블로그 리뷰수'].values * 0.01)
+
+    X = TrainDF[['별점', '선호도', '별점 리뷰수', '블로그 리뷰수']].values
+    y = TrainDF['추천율'].values
+
+    # 모델 생성
+    model = RecommendationModel()
+    model.train(X, y)
+
+    placesDF = restaurant_list()
+    placesDF = DataInit(placesDF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre)
+
+    #print(placesDF)
+
+    # '별점 리뷰수'와 '블로그 리뷰수'에서 숫자만 추출하여 업데이트
+    placesDF['별점'] = placesDF['별점'].apply(Extract_Numbers)
+    placesDF['별점 리뷰수'] = placesDF['별점 리뷰수'].apply(Extract_Numbers)
+    placesDF['블로그 리뷰수'] = placesDF['블로그 리뷰수'].apply(Extract_Numbers)
+
+    realX = placesDF[['별점', '선호도', '별점 리뷰수', '블로그 리뷰수']].values
+    #print(placesDF)
+    #print(realX)
+
+    # 여기 X에는 실제 데이터가 들어가야합니다! (지금은 잘 나오나 원래 데이터로 돌려봤어요.)
+    Predict_data = model.predict(realX)
+
+    # 실제 데이터프레임(placesDF 말고)에서 '추천율' column을 생성한 후에 예측한 추천율을 넣어놓습니다.
+    placesDF['추천율'] = 0
+    placesDF['추천율'] = Predict_data
+
+    # 추천율을 기준으로 정렬합니다. (추천율이 높은 순서대로 하기위해서 ascending = False를 사용했습니다.)
+    return placesDF.sort_values('추천율', ascending = False)
+
+    ''' 끝 '''
+
+def Loading():
+    task_canceled = [False]
+    dialog = LoadingDialog(window, task_canceled, title="Loading")
+    
+    if task_canceled[0]:
+        return
+
 
 def mainButtonPressed():
     # put some search result to `data`
@@ -13,14 +100,12 @@ def mainButtonPressed():
 
     # run the search algorithm here
     # TODO: run as background task(thread non-blocking)
-    for key, value in survey.answers.items():
-        print(key, value.get(), sep=": ")
 
-    task_canceled = [False]
-    dialog = LoadingDialog(window, task_canceled, title="Loading")
-    
-    if task_canceled[0]:
-        return
+    # for key, value in survey.answers.items():
+    #     print(key, value.get(), sep=": ")
+
+    data = ML(survey)
+    # Loading()
 
     displaySearchResult(data)
 
@@ -34,6 +119,13 @@ def displaySearchResult(data):
     window.geometry(f"{width}x{width}")
     # this will re-enable auto-resizing by systems when widgets are restored 
     window.geometry("") 
+
+    # give some placeholder item to the list
+    #item_count = 5
+    for i, (name, address, time, rate) in enumerate(zip(data['이름'], data['주소'], data['영업시간'], data['별점'])):
+        listitem = ListItem(listframe.scrollable_frame, name, address, time, rate)
+        listitem.grid(column=0, row=i, sticky=[W, N])
+        listframe.scrollable_frame.rowconfigure(i, weight=0)
 
     # restore searched result UI layout
     mainframe_padding = 5
@@ -87,12 +179,12 @@ if __name__ == '__main__':
     listframe.grid(column=0, row=1, sticky=(N, W, E, S))
     mainframe.rowconfigure(1, weight=1)
 
-    # give some placeholder item to the list
-    item_count = 5
-    for i in range(item_count):
-        listitem = ListItem(listframe.scrollable_frame, "name", "distance", "time", 5)
-        listitem.grid(column=0, row=i, sticky=[W, N])
-        listframe.scrollable_frame.rowconfigure(i, weight=0)
+    # # give some placeholder item to the list
+    # item_count = 5
+    # for i in range(item_count):
+    #     listitem = ListItem(listframe.scrollable_frame, "name", "distance", "time", 5)
+    #     listitem.grid(column=0, row=i, sticky=[W, N])
+    #     listframe.scrollable_frame.rowconfigure(i, weight=0)
 
     buttomBar = ttk.Separator(mainframe, orient='horizontal')
     buttomBar.grid(column=0, row=2, sticky=[E, W])
