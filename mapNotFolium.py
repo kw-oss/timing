@@ -32,10 +32,11 @@ headers = {
 }
 # 중심 좌표
 lon, lat = "127.020326886309", "37.5164324582415"
-crd = geocoding("서울특별시 노원구 광운로 20")
-_center = f"{crd['lng']},{crd['lat']}"
+myLocation = addr_to_lat_lon("서울특별시 노원구 광운로 20")
+markerCenter = f"""type:n|size:small|pos:{myLocation[0]} {myLocation[1]}|color:green|viewSizeRatio:0.5"""
+_center = f"{myLocation[0]},{myLocation[1]}"
 # 줌 레벨 - 0 ~ 20
-_level = 15
+_level = 14
 # 가로 세로 크기 (픽셀)
 _w, _h = 500, 300
 # 지도 유형 - basic, traffic, satellite, satellite_base, terrain
@@ -47,26 +48,26 @@ _scale = 2
 # 마커
 #_markers = f"""type:n|size:mid|pos:{lon} {lat}|color:red|viewSizeRatio:0.5|label:1"""
 
-df = addr_to_lat_lon("서울 노원구 광운로 37 1층")
-_markers1 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:1"""
-df = addr_to_lat_lon("서울 노원구 광운로 133")
-_markers2 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:2"""
-df = addr_to_lat_lon("서울 노원구 광운로1길 26")
-_markers3 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:3"""
-df = addr_to_lat_lon("서울 노원구 광운로 61 2층")
-_markers4 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:4"""
-df = addr_to_lat_lon("서울 노원구 광운로2길 6 1층")
-_markers5 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:5"""
-df = addr_to_lat_lon("서울 노원구 광운로 132 월계역신도브래뉴 B동 1층 103호")
-_markers6 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:6"""
-df = addr_to_lat_lon("서울 노원구 광운로 29 2층")
-_markers7 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:7"""
-df = addr_to_lat_lon("서울 노원구 광운로 46")
-_markers8 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:8"""
-df = addr_to_lat_lon("서울 노원구 광운로 35 2층")
-_markers9 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:9"""
-df = addr_to_lat_lon("서울 노원구 광운로 52")
-_markers10 = f"""type:n|size:mid|pos:{df[0]} {df[1]}|color:red|viewSizeRatio:0.5|label:10"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 37 1층")
+_markers1 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:1"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 133")
+_markers2 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:2"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로1길 26")
+_markers3 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:3"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 61 2층")
+_markers4 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:4"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로2길 6 1층")
+_markers5 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:5"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 132 월계역신도브래뉴 B동 1층 103호")
+_markers6 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:6"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 29 2층")
+_markers7 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:7"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 46")
+_markers8 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:8"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 35 2층")
+_markers9 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:9"""
+foodLocation = addr_to_lat_lon("서울 노원구 광운로 52")
+_markers10 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:10"""
 
 
 #crd = geocoding("서울 노원구 광운로 52")
@@ -79,7 +80,7 @@ _public_transit = True
 _dataversion = ""
 
 # URL
-url = f"{endpoint}?center={_center}&level={_level}&w={_w}&h={_h}&maptype={_maptype}&format={_format}&scale={_scale}&markers={_markers1}&markers={_markers2}&markers={_markers3}&markers={_markers4}&markers={_markers5}&markers={_markers6}&markers={_markers7}&markers={_markers8}&markers={_markers9}&markers={_markers10}&lang={_lang}&public_transit={_public_transit}&dataversion={_dataversion}"
+url = f"{endpoint}?center={_center}&level={_level}&w={_w}&h={_h}&maptype={_maptype}&format={_format}&scale={_scale}&markers={markerCenter}&markers={_markers1}&markers={_markers2}&markers={_markers3}&markers={_markers4}&markers={_markers5}&markers={_markers6}&markers={_markers7}&markers={_markers8}&markers={_markers9}&markers={_markers10}&lang={_lang}&public_transit={_public_transit}&dataversion={_dataversion}"
 res = requests.get(url, headers=headers)
 
 image_data = io.BytesIO(res.content)
