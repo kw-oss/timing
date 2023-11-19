@@ -8,10 +8,8 @@ from subprocess import CREATE_NO_WINDOW
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC #selenium에서 사용할 모듈 import
 
-#import time
 import requests
 from bs4 import BeautifulSoup
-#import re
 import csv
 
 import subprocess as sp # 쉘 명령어를 실행하기 위한 모듈
