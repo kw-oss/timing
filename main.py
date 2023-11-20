@@ -1,3 +1,5 @@
+import threading
+
 from tkinter import ttk, Tk
 from tkinter.constants import *
 from PIL import ImageTk, Image
@@ -39,7 +41,8 @@ def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
 
     return DF
 
-def ML(survey):
+# TODO: convert to cancelable background task
+def ML(survey, data: list):
     ''' 추가한 부분 '''
     
     # 합칠 때, UI에서 선호도 가져오면 됩니다.
@@ -90,32 +93,24 @@ def ML(survey):
     placesDF['추천율'] = Predict_data
 
     # 추천율을 기준으로 정렬합니다. (추천율이 높은 순서대로 하기위해서 ascending = False를 사용했습니다.)
-    return placesDF.sort_values('추천율', ascending = False)
-
+    data.append(placesDF.sort_values('추천율', ascending = False))
     ''' 끝 '''
-
-def Loading():
-    task_canceled = [False]
-    dialog = LoadingDialog(window, task_canceled, title="Loading")
-    
-    if task_canceled[0]:
-        return
 
 
 def mainButtonPressed():
     # put some search result to `data`
-    data = None
+    data = []
 
-    # run the search algorithm here
-    # TODO: run as background task(thread non-blocking)
+    bg_thread = threading.Thread(target=ML, args=(survey, data))
+    bg_thread.start()
 
-    # for key, value in survey.answers.items():
-    #     print(key, value.get(), sep=": ")
+    dialog = LoadingDialog(window, data, title="Loading")
 
-    data = ML(survey)
-    # Loading()
+    # TODO: cancel background task
+    if len(data) == 0:
+        return
 
-    displaySearchResult(data)
+    displaySearchResult(data[0])
 
 def displaySearchResult(data):
     # hide question label
