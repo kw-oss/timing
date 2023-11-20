@@ -14,14 +14,14 @@ class ListItem(ttk.Frame):
 
     def initUI(self):
         self.style = ttk.Style()
-        self.style.configure("Title.TLabel", font=("Consolas", 12, "bold"))
-        self.style.configure("subTitle.TLabel", font=("Consolas", 10, "bold"))
-        self.style.configure("Detail.TLabel", font=("Consolas", 10, "normal"))
+        self.style.configure("Title.TLabel", font=("Malgun Gothic", 12, "bold"))
+        self.style.configure("subTitle.TLabel", font=("Malgun Gothic", 10, "bold"))
+        self.style.configure("Detail.TLabel", font=("Malgun Gothic", 10, "normal"))
 
-        self.name_label      = ttk.Label(self, textvariable=self.name,       style="Title.TLabel", background='lightblue')
-        self.distance_label  = ttk.Label(self, textvariable=self.distance,   style="Detail.TLabel", background='lightblue')
-        self.time_label      = ttk.Label(self, textvariable=self.time,       style="Detail.TLabel", background='lightblue')
-        self.rating_label    = ttk.Label(self, textvariable=self.rating,     style="Detail.TLabel", background='lightblue')
+        self.name_label      = ttk.Label(self, textvariable=self.name,       style="Title.TLabel", background='peachpuff', foreground='black')
+        self.distance_label  = ttk.Label(self, textvariable=self.distance,   style="Detail.TLabel", background='peachpuff', foreground='black')
+        self.time_label      = ttk.Label(self, textvariable=self.time,       style="Detail.TLabel", background='peachpuff', foreground='black')
+        self.rating_label    = ttk.Label(self, textvariable=self.rating,     style="Detail.TLabel", background='peachpuff', foreground='black')
 
         self.name_label      .configure(style="Title.TLabel")
         self.distance_label  .configure(style="Detail.TLabel")

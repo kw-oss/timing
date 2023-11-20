@@ -1,5 +1,3 @@
-import threading
-
 from tkinter import ttk, Tk
 from tkinter.constants import *
 from PIL import ImageTk, Image
@@ -15,6 +13,8 @@ from mapList import restaurant_list
 import pandas as pd
 
 from ttkthemes import ThemedTk
+
+import threading
 
 def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
     Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두', '닭요리',
@@ -41,7 +41,6 @@ def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
 
     return DF
 
-# TODO: convert to cancelable background task
 def ML(survey, data: list):
     ''' 추가한 부분 '''
     
@@ -68,7 +67,7 @@ def ML(survey, data: list):
     placesDF = restaurant_list()
 
     while(placesDF.empty):
-        print("다시 리스트 가져오는 중..")
+        print("Loading")
         placesDF = restaurant_list()
 
 
@@ -94,22 +93,39 @@ def ML(survey, data: list):
 
     # 추천율을 기준으로 정렬합니다. (추천율이 높은 순서대로 하기위해서 ascending = False를 사용했습니다.)
     data.append(placesDF.sort_values('추천율', ascending = False))
+
     ''' 끝 '''
 
+class MyThread(threading.Thread):
+    def __init__(self, survey):
+        super().__init__()
+        self.survey = survey
+        self.data = None
+    
+    def run(self):
+        self.data = ML(self.survey)
+
+    def get_result(self):
+        return self.data
 
 def mainButtonPressed():
     # put some search result to `data`
     data = []
+
+    # run the search algorithm here
+    # TODO: run as background task(thread non-blocking)
+
+    # for key, value in survey.answers.items():
+    #     print(key, value.get(), sep=": ")
 
     bg_thread = threading.Thread(target=ML, args=(survey, data))
     bg_thread.start()
 
     dialog = LoadingDialog(window, data, title="Loading")
 
-    # TODO: cancel background task
     if len(data) == 0:
         return
-
+    
     displaySearchResult(data[0])
 
 def displaySearchResult(data):
@@ -184,7 +200,7 @@ def currentWindowSize() -> (int, int):
 
 if __name__ == '__main__':
     window =ThemedTk(theme = 'arc')
-    window.title("Result")
+    window.title("Timing : 맛집 찾기 프로그램")
 
     mainframe_padding = 50
 
@@ -199,7 +215,7 @@ if __name__ == '__main__':
 
     # 배경색 바꾸는 Style + 적용
     style = ttk.Style()
-    style.configure('TFrame', background='lightblue')
+    style.configure('TFrame', background='antiquewhite')
     mainframe.configure(style='TFrame')
 
     # placeholder image for map area
@@ -207,7 +223,7 @@ if __name__ == '__main__':
     map = ttk.Label(mainframe, image=map_placeholder)
     map.grid(column=0, row=0, sticky=N)
     mainframe.rowconfigure(0, weight=0)
-    map.configure(background='lightblue')
+    map.configure(background='peachpuff')
 
     listframe = ScrollableFrame(mainframe)
     listframe.grid(column=0, row=1, sticky=(N, W, E, S))
@@ -228,21 +244,33 @@ if __name__ == '__main__':
     listframe.grid_remove()
     buttomBar.grid_remove()
 
+    title_text = "Timing : 맛집 찾기 프로그램"
+    title_label = ttk.Label(mainframe)
+    title_label.configure(text=title_text)
+    title_label.grid(column=0, row=0, sticky=[N])
+
+    title_label.configure(background='antiquewhite', foreground='black', font=("NanumGothic", 15, "bold"))
+
+    #빈 공간을 위해서 추가하는 빈 라벨
+    empty_label = ttk.Label(mainframe, text="")
+    empty_label.grid(column=0, row=1, sticky=[N])
+    empty_label.configure(background='antiquewhite')
+
     question_text = "어떤 음식을 선호하시나요?"
     question_label = ttk.Label(mainframe)
     question_label.configure(text=question_text)
-    question_label.grid(column=0, row=0, sticky=[W, N])
+    question_label.grid(column=0, row=2, sticky=[W])
 
-    question_label.configure(background='lightblue', foreground='black', font=("Malgun Gothic", 12, "normal"))
+    question_label.configure(background='antiquewhite', foreground='dimgray', font=("Malgun Gothic", 10, "normal"))
 
     score_kinds = ["싫어함", "별로", "그럭저럭", "좋아함", "땡김"]
     food_kinds = ["고기&구이", "면", "백반&죽", "패스트푸드"]
     survey = SurveySet(mainframe, score_names=score_kinds, subtitles=food_kinds)
-    survey.grid(column=0, row=1, sticky=(N, W, E, S), pady=(20, 30))
+    survey.grid(column=0, row=3, sticky=(N, W, E, S), pady=(20, 30))
 
     # runButton wrapper for dynamic padding
     buttomArea = ttk.Frame(mainframe)
-    buttomArea.grid(column=0, row=3, sticky=[N, E, S, W])
+    buttomArea.grid(column=0, row=4, sticky=[N, E, S, W])
     buttomArea.columnconfigure(0, weight=2)
     buttomArea.columnconfigure(1, weight=1) # runButton column
     buttomArea.columnconfigure(2, weight=2)

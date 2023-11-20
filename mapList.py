@@ -8,36 +8,66 @@ from subprocess import CREATE_NO_WINDOW
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC #selenium에서 사용할 모듈 import
 
-import time
 import requests
 from bs4 import BeautifulSoup
-import re
 import csv
 
-import tkinter as tk
+import subprocess as sp # 쉘 명령어를 실행하기 위한 모듈
+import re # 정규표현식 사용
+import json
+
 import pandas as pd
-import numpy as np
 
 def restaurant_list():
-    #위치
-    #위치 주소에 대한 html값을 찾아서 Address에 넣음
-    url = 'https://search.naver.com/search.naver?query=날씨'
-    html = requests.get(url)
-    soup = BeautifulSoup(html.text, 'html.parser')
-    #myAddress = soup.find('div', {'class': 'title_area _area_panel'}).find('h2', {'class': 'title'}).text
+    
+    # 정확도 조절 - 높은 값으로 설정할수록 속도가 빨라지나 정확도가 떨어짐
+    accuracy = 1
+    commd = 'add-type -assemblyname system.device; '\
+            '$loc = new-object system.device.location.geocoordinatewatcher;'\
+            '$loc.start(); '\
+            'while(($loc.status -ne "Ready") -and ($loc.permission -ne "Denied")) '\
+            '{start-sleep -milliseconds 100}; '\
+            '$acc = %d; '\
+            'while($loc.position.location.horizontalaccuracy -gt $acc) '\
+            '{start-sleep -milliseconds 100; $acc = [math]::Round($acc*1.5)}; '\
+            '$loc.position.location.latitude; '\
+            '$loc.position.location.longitude; '\
+            '$loc.position.location.horizontalaccuracy; '\
+            '$loc.stop()' %(accuracy)
 
+    pshellcomm = ['powershell', commd]
 
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+    # 쉘 명령어 실행 및 결과값 저장
+    p = sp.Popen(pshellcomm, stdin = sp.PIPE, stdout = sp.PIPE, stderr = sp.STDOUT, text=True)
+    (out, err) = p.communicate()
+
+    # 전체 출력 문자열에서 개행문자를 기준으로 분리 
+    out = re.split('\n', out)
+
+    lat = float(out[0])
+    long = float(out[1])
+    radius = int(out[2])
+
+    # print(lat, long, radius)
+
+    def lat_lon_to_addr(lon ,lat):
+        url = 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={longitude}&y={latitude}'.format(longitude=lon,latitude=lat)
+        headers = {"Authorization": "KakaoAK " + "82e74383a81e76a453aed30fac79cef2"}
+        result = json.loads(str(requests.get(url, headers=headers).text))
+        match_first = result['documents'][0]['address_name']
+        return str(match_first)
+
+    myAddress = lat_lon_to_addr(long,lat)
+    
+    options = Options()
     options = webdriver.ChromeOptions()
-    options.add_argument(f"user-agent = {user_agent}")
-    option = options.add_argument("headless")
-    options.add_argument("disable-gpu")
+    options.add_argument("--headless")
+    service = Service(ChromeDriverManager().install())
 
-    myAddress = "노원구 광운로"
     url = f'https://map.kakao.com/?q={myAddress}+맛집'
-    driver = webdriver.Chrome(options=option)
+    driver = webdriver.Chrome(service=service, options=options)
     driver.get(url)
-
+    
     #식당 정보 얻어오는 코드
     restaurant = driver.find_elements(By.CLASS_NAME, 'link_name')
     star = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[4]/span[1]/em')
@@ -46,7 +76,8 @@ def restaurant_list():
     type = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[3]/span')
     starReview = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[4]/span[1]/a')
     blogReview = driver.find_elements(By.XPATH, '//*[@id="info.search.place.list"]/li/div[4]/a/em')
-    
+
+
     # 데이터를 담을 리스트 초기화
     placesDF = {
         '이름': [],
@@ -71,7 +102,6 @@ def restaurant_list():
     # DataFrame 생성
     placesDF = pd.DataFrame(placesDF)
 
-    # 드라이버 종료 (실제 코드에서는 필요에 따라 수정)
-    driver.close()
+    driver.quit()
 
     return placesDF
