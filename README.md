@@ -28,13 +28,19 @@ git clone https://github.com/kw-oss/timing
 
    *TIMING을 통해 더 나은 식사 경험을 즐겨보세요!*
 
+
+
 ### ✔️ Branch Rule  
 **master**
 
 
 
+
+
    #### ➿라이선스
    &nbsp;TIMING 프로젝트는 MIT 라이선스에 따라 라이선스가 부여되어 있습니다.
+
+
 
    ##### 👪팀원 소개
    <table>
