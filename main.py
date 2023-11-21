@@ -8,7 +8,7 @@ from scrollableWidget import ScrollableFrame
 from restaurantItemWidget import ListItem
 from LinearModel import RecommendationModel
 from LinearModel import Extract_Numbers
-from mapList import restaurant_list
+from mapList import CurrentLocation
 
 import pandas as pd
 
@@ -64,12 +64,8 @@ def ML(survey, data: list):
     model = RecommendationModel()
     model.train(X, y, epochs = 100)
 
-    placesDF = restaurant_list()
-
-    while(placesDF.empty):
-        print("Loading")
-        placesDF = restaurant_list()
-
+    location = CurrentLocation()
+    placesDF = location.restaurant_list()
 
     placesDF = DataInit(placesDF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre)
 
