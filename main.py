@@ -141,7 +141,7 @@ def displaySearchResult(data):
 
     # give some placeholder item to the list
     #item_count = 5
-    for i, (name, address, time, rate) in enumerate(zip(data['이름'], data['주소'], data['영업시간'], data['별점'])):
+    for i, (name, address, time, rate, rate_count, review_count) in enumerate(zip(data['이름'], data['주소'], data['영업시간'], data['별점'], data['별점 리뷰수'], data['블로그 리뷰수'])):
 
         # ★☆ 별점 표시
         if(rate >= 5):
@@ -167,7 +167,11 @@ def displaySearchResult(data):
         else:
             time = '영업시간 : ' + time
 
-        listitem = ListItem(listframe.scrollable_frame, name, address, time, rate)
+        rate += f' ({rate_count}명 평가)'
+
+        review_text = f'리뷰 {review_count}개'
+
+        listitem = ListItem(listframe.scrollable_frame, name, address, time, rate, review_text)
         listitem.grid(column=0, row=i, sticky=[W, N])
         listframe.scrollable_frame.rowconfigure(i, weight=0)
 
