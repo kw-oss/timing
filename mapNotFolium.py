@@ -1,24 +1,54 @@
 from PIL import Image
-import requests, json
+import requests
 import io
-from geopy.geocoders import Nominatim
+import subprocess as sp # 쉘 명령어를 실행하기 위한 모듈
+import re # 정규표현식 사용
+import json
 
+# 정확도 조절 - 높은 값으로 설정할수록 속도가 빨라지나 정확도가 떨어짐
+accuracy = 1
+commd = 'add-type -assemblyname system.device; '\
+        '$loc = new-object system.device.location.geocoordinatewatcher;'\
+        '$loc.start(); '\
+        'while(($loc.status -ne "Ready") -and ($loc.permission -ne "Denied")) '\
+        '{start-sleep -milliseconds 100}; '\
+        '$acc = %d; '\
+        'while($loc.position.location.horizontalaccuracy -gt $acc) '\
+        '{start-sleep -milliseconds 100; $acc = [math]::Round($acc*1.5)}; '\
+        '$loc.position.location.latitude; '\
+        '$loc.position.location.longitude; '\
+        '$loc.position.location.horizontalaccuracy; '\
+        '$loc.stop()' %(accuracy)
 
-def geocoding(address):
-    geolocoder = Nominatim(user_agent = 'South Korea', timeout=None)
-    geo = geolocoder.geocode(address)
-    crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
+pshellcomm = ['powershell', commd]
 
-    return crd
+# 쉘 명령어 실행 및 결과값 저장
+p = sp.Popen(pshellcomm, stdin = sp.PIPE, stdout = sp.PIPE, stderr = sp.STDOUT, text=True)
+(out, err) = p.communicate()
 
-api_key = "82e74383a81e76a453aed30fac79cef2"
+# 전체 출력 문자열에서 개행문자를 기준으로 분리 
+out = re.split('\n', out)
+
+lat = float(out[0])
+long = float(out[1])
+radius = int(out[2])
+
+print(lat, long, radius)
 
 def addr_to_lat_lon(addr):
+    api_key = "82e74383a81e76a453aed30fac79cef2"
     url = 'https://dapi.kakao.com/v2/local/search/address.json?query={address}'.format(address=addr)
     headers = {"Authorization": "KakaoAK " + api_key}
     result = json.loads(str(requests.get(url, headers=headers).text))
     match_first = result['documents'][0]['address']
     return float(match_first['x']), float(match_first['y'])
+
+def lat_lon_to_addr(lon ,lat):
+        url = 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={longitude}&y={latitude}'.format(longitude=lon,latitude=lat)
+        headers = {"Authorization": "KakaoAK " + "82e74383a81e76a453aed30fac79cef2"}
+        result = json.loads(str(requests.get(url, headers=headers).text))
+        match_first = result['documents'][0]['address_name']
+        return str(match_first)
 
 # NCP 콘솔에서 복사한 클라이언트ID와 클라이언트Secret 값
 client_id = "c5g1xuzoiy"
@@ -31,10 +61,10 @@ headers = {
     "X-NCP-APIGW-API-KEY": client_secret,
 }
 # 중심 좌표
-lon, lat = "127.020326886309", "37.5164324582415"
-myLocation = addr_to_lat_lon("서울특별시 노원구 광운로 20")
-markerCenter = f"""type:n|size:small|pos:{myLocation[0]} {myLocation[1]}|color:green|viewSizeRatio:0.5"""
-_center = f"{myLocation[0]},{myLocation[1]}"
+#myAddress = lat_lon_to_addr(long,lat)
+#myLocation = addr_to_lat_lon(myAddress)
+markerCenter = f"""type:n|size:small|pos:{long} {lat}|color:green|viewSizeRatio:0.5"""
+_center = f"{long},{lat}"
 # 줌 레벨 - 0 ~ 20
 _level = 14
 # 가로 세로 크기 (픽셀)
@@ -70,9 +100,7 @@ foodLocation = addr_to_lat_lon("서울 노원구 광운로 52")
 _markers10 = f"""type:n|size:mid|pos:{foodLocation[0]} {foodLocation[1]}|color:red|viewSizeRatio:0.5|label:10"""
 
 
-#crd = geocoding("서울 노원구 광운로 52")
-#_markers10 = f"""type:n|size:mid|pos:{crd['lng']} {crd['lat']}|color:red|viewSizeRatio:0.5|label:10"""
-# 라벨 언어 설정 - ko, en, ja, zh
+
 _lang = "ko"
 # 대중교통 정보 노출 - Boolean
 _public_transit = True
