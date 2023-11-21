@@ -65,7 +65,11 @@ def ML(survey, data: list):
     model.train(X, y, epochs = 100)
 
     location = CurrentLocation()
-    placesDF = location.restaurant_list()
+
+    placesDF = pd.DataFrame() # 빈 데이터프레임 생성
+    # 네트워크 오류로 인해 데이터를 받아오지 못할 경우 재호출
+    while(placesDF.empty):
+        placesDF = location.restaurant_list()
 
     placesDF = DataInit(placesDF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre)
 
