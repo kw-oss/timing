@@ -9,6 +9,7 @@ from restaurantItemWidget import ListItem
 from LinearModel import RecommendationModel
 from LinearModel import Extract_Numbers
 from mapList import CurrentLocation
+from mapImage import getMapImage
 
 import pandas as pd
 
@@ -92,8 +93,12 @@ def ML(survey, data: list):
     placesDF['추천율'] = Predict_data
 
     # 추천율을 기준으로 정렬합니다. (추천율이 높은 순서대로 하기위해서 ascending = False를 사용했습니다.)
-    data.append(placesDF.sort_values('추천율', ascending = False))
+    sortedDF = placesDF.sort_values('추천율', ascending = False)
 
+    image = getMapImage(location.lat, location.long, sortedDF['주소'])
+    map_images.append(ImageTk.PhotoImage(image))
+
+    data.append(sortedDF)
     ''' 끝 '''
 
 class MyThread(threading.Thread):
@@ -133,9 +138,12 @@ def displaySearchResult(data):
     question_label.grid_remove()
     survey.grid_remove()
 
+    map.configure(image=map_images[0])
+
     # prevents displaying large window bigger than minsize
-    width = map_placeholder.width()
-    window.geometry(f"{width}x{width}")
+    width = map_images[0].width()
+    height = map_images[0].height()
+    window.geometry(f"{width}x{height}")
     # this will re-enable auto-resizing by systems when widgets are restored 
     window.geometry("")
 
@@ -222,9 +230,8 @@ if __name__ == '__main__':
     style.configure('TFrame', background='antiquewhite')
     mainframe.configure(style='TFrame')
 
-    # placeholder image for map area
-    map_placeholder = ImageTk.PhotoImage(Image.open('image_placeholder.png'))
-    map = ttk.Label(mainframe, image=map_placeholder)
+    map_images = []
+    map = ttk.Label(mainframe)
     map.grid(column=0, row=0, sticky=N)
     mainframe.rowconfigure(0, weight=0)
     map.configure(background='peachpuff')
