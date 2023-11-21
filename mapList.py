@@ -1,16 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from subprocess import CREATE_NO_WINDOW
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC #selenium에서 사용할 모듈 import
 
 import requests
-from bs4 import BeautifulSoup
-import csv
 
 import subprocess as sp # 쉘 명령어를 실행하기 위한 모듈
 import re # 정규표현식 사용
