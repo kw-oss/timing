@@ -1,5 +1,12 @@
 
-# 맞춤형 음식점 추천, TIMING⏰!      
+# 맞춤형 음식점 추천, <TIMING>⏰!      
+
+
+
+ <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+ <img src="https://img.shields.io/badge/tensorflow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
+ <br/>
+ <br/>
 
 
 
