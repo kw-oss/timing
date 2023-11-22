@@ -5,7 +5,7 @@ import subprocess as sp # 쉘 명령어를 실행하기 위한 모듈
 import re # 정규표현식 사용
 import json
 
-def addr_to_lat_lon(addr):
+def addr_to_lon_lat(addr):
     api_key = "82e74383a81e76a453aed30fac79cef2"
     url = 'https://dapi.kakao.com/v2/local/search/address.json?query={address}'.format(address=addr)
     headers = {"Authorization": "KakaoAK " + api_key}
@@ -13,7 +13,7 @@ def addr_to_lat_lon(addr):
     match_first = result['documents'][0]['address']
     return float(match_first['x']), float(match_first['y'])
 
-def lat_lon_to_addr(lon ,lat):
+def lon_lat_to_addr(lon ,lat):
         url = 'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={longitude}&y={latitude}'.format(longitude=lon,latitude=lat)
         headers = {"Authorization": "KakaoAK " + "82e74383a81e76a453aed30fac79cef2"}
         result = json.loads(str(requests.get(url, headers=headers).text))
@@ -31,9 +31,8 @@ headers = {
     "X-NCP-APIGW-API-KEY": client_secret,
 }
 
-def getMapImage(lat, long, locations: list):
-    markerCenter = f"""type:n|size:small|pos:{long} {lat}|color:green|viewSizeRatio:0.5"""
-    _center = f"{long},{lat}"
+def getMapImage(lat, lon, locations: list):
+    current_pos_marker = f"""type:n|size:small|pos:{lon} {lat}|color:green|viewSizeRatio:0.5"""
     # 줌 레벨 - 0 ~ 20
     _level = 14
     # 가로 세로 크기 (픽셀)
@@ -50,17 +49,31 @@ def getMapImage(lat, long, locations: list):
     _public_transit = True
     # 서비스에서 사용할 데이터 버전 파라미터 전달 CDN 캐시 무효화
     _dataversion = ""
-    
+
+    markers_lon = []
+    markers_lat = []
+    for location in locations:
+        (location_lon, location_lat) = addr_to_lon_lat(location)
+        markers_lon.append(location_lon)
+        markers_lat.append(location_lat)
+
+    marker_top = max(max(markers_lat), lat)
+    marker_bottom = min(min(markers_lat), lat)
+    marker_left = min(min(markers_lon), lon)
+    marker_right = max(max(markers_lon), lon)
+    centerPos_lat = (marker_top + marker_bottom) / 2
+    centerPos_lon = (marker_left + marker_right) / 2
     markers = []
     index = 1
-    for location in locations:
-         (lat, long) = addr_to_lat_lon(location)
-         markers.append(f"type:n|size:mid|pos:{lat} {long}|color:red|viewSizeRatio:0.5|label:{index}")
-         index += 1
+    for (marker_lon, marker_lat) in zip(markers_lon, markers_lat):
+        markers.append(f"type:n|size:mid|pos:{marker_lon} {marker_lat}|color:red|viewSizeRatio:0.5|label:{index}")
+        index += 1
+
+    _center = f"{centerPos_lon:.6f},{centerPos_lat:.6f}"
 
     # URL
     url = f"{endpoint}?center={_center}&level={_level}&w={_w}&h={_h}&maptype={_maptype}&format={_format}&scale={_scale}"
-    url += f"&markers={markerCenter}"
+    url += f"&markers={current_pos_marker}"
     for marker in markers:
         url += f"&markers={marker}"
     
