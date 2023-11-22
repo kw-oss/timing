@@ -1,4 +1,4 @@
-from tkinter import ttk, Tk
+from tkinter import ttk, Canvas
 from tkinter.constants import *
 from PIL import ImageTk
 
@@ -243,12 +243,11 @@ if __name__ == '__main__':
     listframe.grid_remove()
     buttomBar.grid_remove()
 
-    title_text = "Timing : 맛집 찾기 프로그램"
-    title_label = ttk.Label(mainframe)
-    title_label.configure(text=title_text)
+    title_image = ImageTk.PhotoImage(file="title.png")
+    title_label = Canvas(mainframe, bg='#F9EDB3', width=title_image.width(), height=title_image.height())
+    title_label.configure(highlightthickness=0)
+    title_label.create_image(0,0, anchor=NW, image=title_image)
     title_label.grid(column=0, row=0, sticky=[N])
-
-    title_label.configure(background='#F9EDB3', foreground='black', font=("NanumGothic", 15, "bold"))
 
     #빈 공간을 위해서 추가하는 빈 라벨
     empty_label = ttk.Label(mainframe, text="")
