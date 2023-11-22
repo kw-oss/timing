@@ -44,6 +44,8 @@ def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
 
 def ML(survey, data: list):
     ''' 추가한 부분 '''
+    # 추천할 음식점 개수
+    restorant_num = 8
     
     # 합칠 때, UI에서 선호도 가져오면 됩니다.
     Meat_pre = survey.answers['고기&구이'].get()
@@ -94,6 +96,9 @@ def ML(survey, data: list):
 
     # 추천율을 기준으로 정렬합니다. (추천율이 높은 순서대로 하기위해서 ascending = False를 사용했습니다.)
     sortedDF = placesDF.sort_values('추천율', ascending = False)
+
+    # 추천율이 높은 순서대로 n개만 뽑아냅니다.
+    sortedDF = sortedDF[:restorant_num]
 
     image = getMapImage(location.lat, location.long, sortedDF['주소'])
     map_images.append(ImageTk.PhotoImage(image))
