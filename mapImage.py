@@ -37,6 +37,9 @@ def getMapImage(lat, lon, locations: list):
     _level = 14
     # 가로 세로 크기 (픽셀)
     _w, _h = 500, 300
+    # 지도 크기와 마커 거리 비율
+    _dist_rate = 0.000028
+
     # 지도 유형 - basic, traffic, satellite, satellite_base, terrain
     _maptype = "basic"
     # 반환 이미지 형식 - jpg, jpeg, png8, png
@@ -61,6 +64,13 @@ def getMapImage(lat, lon, locations: list):
     marker_bottom = min(min(markers_lat), lat)
     marker_left = min(min(markers_lon), lon)
     marker_right = max(max(markers_lon), lon)
+
+    if ((marker_top - marker_bottom) > _dist_rate * _h) or ((marker_right - marker_left) > _dist_rate * _w):
+        print("zoom out")
+        _level = 13
+    else:
+        _level = 14
+
     centerPos_lat = (marker_top + marker_bottom) / 2
     centerPos_lon = (marker_left + marker_right) / 2
     markers = []
