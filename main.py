@@ -142,6 +142,7 @@ def displaySearchResult(data):
     # hide question label
     question_label.grid_remove()
     survey.grid_remove()
+    title_label.grid_remove()
 
     map.configure(image=map_images[0])
 
