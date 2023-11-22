@@ -10,7 +10,6 @@ class ListItem(ttk.Frame):
         self.time        = tk.StringVar(self, value=time)
         self.rating      = tk.StringVar(self, value=rating) 
         self.review_text = tk.StringVar(self, value=review_text)
-        # self.photo = photo
         self.initUI()
 
     def initUI(self):

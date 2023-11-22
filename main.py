@@ -1,6 +1,6 @@
 from tkinter import ttk, Tk
 from tkinter.constants import *
-from PIL import ImageTk, Image
+from PIL import ImageTk
 
 from surveyWidget import SurveySet
 from loadingDialog import LoadingDialog
@@ -43,11 +43,10 @@ def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
     return DF
 
 def ML(survey, data: list):
-    ''' 추가한 부분 '''
     # 추천할 음식점 개수
     restorant_num = 8
     
-    # 합칠 때, UI에서 선호도 가져오면 됩니다.
+    # UI로부터 선호도 데이터를 가져옵니다.
     Meat_pre = survey.answers['고기&구이'].get()
     Noodle_pre = survey.answers['면'].get()
     Rice_pre = survey.answers['백반&죽'].get()
@@ -76,21 +75,15 @@ def ML(survey, data: list):
 
     placesDF = DataInit(placesDF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre)
 
-    #print(placesDF)
-
     # '별점 리뷰수'와 '블로그 리뷰수'에서 숫자만 추출하여 업데이트
     placesDF['별점'] = placesDF['별점'].apply(Extract_Numbers)
     placesDF['별점 리뷰수'] = placesDF['별점 리뷰수'].apply(Extract_Numbers)
     placesDF['블로그 리뷰수'] = placesDF['블로그 리뷰수'].apply(Extract_Numbers)
 
     realX = placesDF[['별점', '선호도', '별점 리뷰수', '블로그 리뷰수']].values
-    #print(placesDF)
-    #print(realX)
-
-    # 여기 X에는 실제 데이터가 들어가야합니다! (지금은 잘 나오나 원래 데이터로 돌려봤어요.)
     Predict_data = model.predict(realX)
 
-    # 실제 데이터프레임(placesDF 말고)에서 '추천율' column을 생성한 후에 예측한 추천율을 넣어놓습니다.
+    # placesDF에서 '추천율' column을 생성한 후에 예측한 추천율을 넣어놓습니다.
     placesDF['추천율'] = 0
     placesDF['추천율'] = Predict_data
 
@@ -104,7 +97,6 @@ def ML(survey, data: list):
     map_images.append(ImageTk.PhotoImage(image))
 
     data.append(sortedDF)
-    ''' 끝 '''
 
 class MyThread(threading.Thread):
     def __init__(self, survey):
@@ -119,14 +111,7 @@ class MyThread(threading.Thread):
         return self.data
 
 def mainButtonPressed():
-    # put some search result to `data`
     data = []
-
-    # run the search algorithm here
-    # TODO: run as background task(thread non-blocking)
-
-    # for key, value in survey.answers.items():
-    #     print(key, value.get(), sep=": ")
 
     bg_thread = threading.Thread(target=ML, args=(survey, data))
     bg_thread.start()
@@ -153,8 +138,6 @@ def displaySearchResult(data):
     # this will re-enable auto-resizing by systems when widgets are restored 
     window.geometry("")
 
-    # give some placeholder item to the list
-    #item_count = 5
     for i, (name, address, time, rate, rate_count, review_count) in enumerate(zip(data['이름'], data['주소'], data['영업시간'], data['별점'], data['별점 리뷰수'], data['블로그 리뷰수'])):
 
         # ★☆ 별점 표시
@@ -245,13 +228,6 @@ if __name__ == '__main__':
     listframe = ScrollableFrame(mainframe)
     listframe.grid(column=0, row=1, sticky=(N, W, E, S))
     mainframe.rowconfigure(1, weight=1)
-
-    # # give some placeholder item to the list
-    # item_count = 5
-    # for i in range(item_count):
-    #     listitem = ListItem(listframe.scrollable_frame, "name", "distance", "time", 5)
-    #     listitem.grid(column=0, row=i, sticky=[W, N])
-    #     listframe.scrollable_frame.rowconfigure(i, weight=0)
 
     buttomBar = ttk.Separator(mainframe, orient='horizontal')
     buttomBar.grid(column=0, row=2, sticky=[E, W])
