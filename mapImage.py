@@ -36,7 +36,7 @@ def getMapImage(lat, lon, locations: list):
     # 줌 레벨 - 0 ~ 20
     _level = 14
     # 가로 세로 크기 (픽셀)
-    _w, _h = 500, 300
+    _w, _h = 400, 300
     # 지도 크기와 마커 거리 비율
     _dist_rate = 0.000028
 
