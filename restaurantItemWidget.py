@@ -31,8 +31,8 @@ class ListItem(ttk.Frame):
         self.rating_label    .configure(style="Detail.TLabel")
         self.review_label    .configure(style="Detail.TLabel")
 
-        self.name_label      .grid(column=0, row=0, columnspan=2, sticky=W)
-        self.distance_label  .grid(column=1, row=1, columnspan=2, sticky=W)
-        self.time_label      .grid(column=1, row=2, columnspan=2, sticky=W)
-        self.rating_label    .grid(column=1, row=3, columnspan=2, sticky=W)
-        self.review_label    .grid(column=1, row=4, columnspan=2, sticky=W)
+        self.name_label      .grid(column=0, row=0, sticky=W)
+        self.distance_label  .grid(column=0, row=1, sticky=W)
+        self.time_label      .grid(column=0, row=2, sticky=W)
+        self.rating_label    .grid(column=0, row=3, sticky=W)
+        self.review_label    .grid(column=0, row=4, sticky=W)
