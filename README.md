@@ -40,6 +40,8 @@ git clone https://github.com/kw-oss/timing
 
    #### ➿라이선스
    &nbsp;TIMING 프로젝트는 MIT 라이선스에 따라 라이선스가 부여되어 있습니다.
+
+   
    &nbsp;TIMING 프로젝트는 Apache License 2.0.에 따라 라이선스가 부여되어 있습니다.  
    
 &nbsp;Apache License 2.0
