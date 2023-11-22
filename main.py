@@ -139,34 +139,37 @@ def displaySearchResult(data):
     window.geometry("")
 
     for i, (name, address, time, rate, rate_count, review_count) in enumerate(zip(data['이름'], data['주소'], data['영업시간'], data['별점'], data['별점 리뷰수'], data['블로그 리뷰수'])):
+        name = f'{i+1}. {name}'
 
         # ★☆ 별점 표시
         if(rate >= 5):
-            rate = '별점 : ' + str(rate) + ' ★★★★★'
+            rate = '★★★★★'
         elif(rate >= 4):
-            rate = '별점 : ' + str(rate) + ' ★★★★☆'
+            rate = '★★★★☆'
         elif(rate >= 3):
-            rate = '별점 : ' + str(rate) + ' ★★★☆☆'
+            rate = '★★★☆☆'
         elif(rate >= 2):
-            rate = '별점 : ' + str(rate) + ' ★★☆☆☆'
+            rate = '★★☆☆☆'
         elif(rate >= 1):
-            rate = '별점 : ' + str(rate) + ' ★☆☆☆☆'
+            rate = '★☆☆☆☆'
         elif(rate >= 0):
-            rate = '별점 : ' + str(rate) + ' ☆☆☆☆☆'
-
-        if(len(address) == 0):
-            address = '주소 : 정보가 없습니다.'
-        else:
-            address = '주소 : ' + address
-
-        if(len(time) == 0):
-            time = '영업시간 : 정보가 없습니다.'
-        else:
-            time = '영업시간 : ' + time
+            rate = '☆☆☆☆☆'
 
         rate += f' ({rate_count}명 평가)'
 
-        review_text = f'리뷰 {review_count}개'
+        if(len(address) == 0):
+            address = '위치 정보 없음'
+
+        if time.startswith('영업시간'):
+            time = time[5:]
+
+        if(len(time) == 0):
+            time = '영업시간 정보 없음'
+
+        if(review_count == 0):
+            review_text = '리뷰 없음'
+        else:
+            review_text = f'리뷰 {review_count}개'
 
         listitem = ListItem(listframe.scrollable_frame, name, address, time, rate, review_text)
         listitem.grid(column=0, row=i, sticky=[W, N])
