@@ -126,8 +126,9 @@ def mainButtonPressed():
 def displaySearchResult(data):
     # hide question label
     question_label.grid_remove()
-    survey.grid_remove()
+    survey_frame.grid_remove()
     title_label.grid_remove()
+    empty_label.grid_remove()
 
     map.configure(image=map_images[0])
 
@@ -182,9 +183,11 @@ def displaySearchResult(data):
     listframe.grid()
     mainframe.rowconfigure(1, weight=1)
     
-    buttomBar.grid()
+    buttomBar.grid(pady=(0, 5))
     mainframe.rowconfigure(2, weight=0)
     
+    runButton.configure(text="다시 찾기")
+
     # change some layout configuration of runButton
     buttomArea.columnconfigure(1, weight=0)
     mainframe.rowconfigure(3, weight=0)
@@ -203,7 +206,7 @@ def currentWindowSize() -> (int, int):
 
 
 if __name__ == '__main__':
-    window =ThemedTk(theme = 'arc')
+    window = ThemedTk(theme = 'arc')
     window.title("Timing : 맛집 찾기 프로그램")
 
     mainframe_padding = 50
@@ -219,7 +222,7 @@ if __name__ == '__main__':
 
     # 배경색 바꾸는 Style + 적용
     style = ttk.Style()
-    style.configure('TFrame', background='antiquewhite')
+    style.configure('TFrame', background='#F9EDB3')
     mainframe.configure(style='TFrame')
 
     map_images = []
@@ -245,24 +248,31 @@ if __name__ == '__main__':
     title_label.configure(text=title_text)
     title_label.grid(column=0, row=0, sticky=[N])
 
-    title_label.configure(background='antiquewhite', foreground='black', font=("NanumGothic", 15, "bold"))
+    title_label.configure(background='#F9EDB3', foreground='black', font=("NanumGothic", 15, "bold"))
 
     #빈 공간을 위해서 추가하는 빈 라벨
     empty_label = ttk.Label(mainframe, text="")
     empty_label.grid(column=0, row=1, sticky=[N])
-    empty_label.configure(background='antiquewhite')
+    empty_label.configure(background='#F9EDB3')
+
+    style = ttk.Style()
+    style.configure("Survey.TFrame", background='#F8F5E2', foreground='dimgray', font=("Malgun Gothic", 10, "normal"))
+    style.configure("subTitle.TLabel", font=("NanumGothic", 11, "bold"), background='#F8F5E2', foreground='dimgray', padding=10)
 
     question_text = "어떤 음식을 선호하시나요?"
-    question_label = ttk.Label(mainframe)
-    question_label.configure(text=question_text)
-    question_label.grid(column=0, row=2, sticky=[W])
 
-    question_label.configure(background='antiquewhite', foreground='dimgray', font=("Malgun Gothic", 10, "normal"))
+    question_label = ttk.Label(text=question_text, style="subTitle.TLabel")
+
+    survey_frame = ttk.LabelFrame(mainframe, labelwidget=question_label, style="Survey.TFrame", padding=10)
+    survey_frame.grid(column=0, row=2, sticky=[N, W, E, S], pady=(0, 30))
 
     score_kinds = ["싫어함", "별로", "그럭저럭", "좋아함", "땡김"]
     food_kinds = ["고기&구이", "면", "백반&죽", "패스트푸드"]
-    survey = SurveySet(mainframe, score_names=score_kinds, subtitles=food_kinds)
-    survey.grid(column=0, row=3, sticky=(N, W, E, S), pady=(20, 30))
+    survey = SurveySet(survey_frame, score_names=score_kinds, subtitles=food_kinds)
+    survey.configure(style='Survey.TFrame')
+    survey.grid(column=0, row=0, sticky=(N, W, E, S))
+    survey_frame.columnconfigure(0, weight=1)
+    survey_frame.rowconfigure(0, weight=1)
 
     # runButton wrapper for dynamic padding
     buttomArea = ttk.Frame(mainframe)
@@ -276,9 +286,13 @@ if __name__ == '__main__':
 
     mainframe.rowconfigure(3, weight=2)
 
-    runButton = ttk.Button(buttomArea)
-    runButton.config(text="맛집 찾기")
-    runButton.config(command=mainButtonPressed)
+    style = ttk.Style()
+    style.configure("main.TButton", background='#F9EDB3', foreground='black', relief='solid', font=("NanumGothic", 10, "bold"))
+    style.configure("main.TButton", focuscolor=style.configure(".")["background"])
+
+    runButton = ttk.Button(buttomArea, style="main.TButton")
+    runButton.configure(text="맛집 찾기")
+    runButton.configure(command=mainButtonPressed)
     runButton.grid(column=1, row=1, sticky=[N, E, S, W])
     
     # set the window's size to fit the initial content

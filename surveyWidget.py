@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, Radiobutton
+from tkinter import ttk
 from tkinter.constants import *
 from typing import List, Dict
 
@@ -23,7 +23,7 @@ class SurveySet(ttk.Frame):
             score_name += " "
 
             new_label = ttk.Label(self, text=score_name)
-            new_label.configure(background='antiquewhite', foreground='dimgray')
+            new_label.configure(background='#F8F5E2', foreground='dimgray')
             new_label.grid(column=i+1, row=0)
             
             self.score_labels.append(new_label)
@@ -56,15 +56,18 @@ class RadioSet:
         
         # set title label
         self.label = ttk.Label(container, text=title)
-        self.label.configure(background='antiquewhite', foreground='dimgray')
+        self.label.configure(background='#F8F5E2', foreground='dimgray')
         self.label.grid(column=col, row=row, sticky=E, padx=(0, 10))
+
+        style = ttk.Style()
+        style.configure("TRadiobutton", background='#F8F5E2', foreground='#F9EDB3', relief='solid')
+        style.configure("TRadiobutton", activebackground='#F8F5E2', activeforeground='#F9EDB3', highlightthickness=1, focuscolor=style.configure(".")["background"])
 
         # set radio buttons
         for i in range(radio_count):
             col += 1
         
-            new_radio = Radiobutton(container, text="", value=i, variable=self.variable, background='darksalmon', foreground='dimgray', relief='sunken')
-            new_radio.configure()
+            new_radio = ttk.Radiobutton(container, text="", value=i, variable=self.variable, style="TRadiobutton")
             new_radio.grid(column=col, row=row)
             
             self.radio.append(new_radio)

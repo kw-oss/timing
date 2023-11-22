@@ -40,8 +40,12 @@ class ScrollableFrame(ttk.Frame):
 
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.canvas.configure(yscrollincrement='1') # prevent dynamic scroll speed based on content size
-        self.canvas.configure(background='antiquewhite')
+        self.canvas.configure(background='#F8F5E2')
         self.canvas.configure(highlightthickness=0)
+
+        style = ttk.Style()
+        style.configure('Scroll.TFrame', background='#F8F5E2')
+        self.scrollable_frame.configure(style='Scroll.TFrame')
 
         self.canvas.grid(row=0, column=0, sticky="nswe")
         self.scrollbar.grid(row=0, column=1, sticky="ens")
