@@ -13,6 +13,7 @@
 git clone https://github.com/kw-oss/timing
 
 
+
 ### 📑사용 방법  
 1. **시간 설정**
   &nbsp;웹사이트에 접속한 후, 홈 화면에서 시간을 설정하세요.
@@ -39,7 +40,12 @@ git clone https://github.com/kw-oss/timing
 
    #### ➿라이선스
    &nbsp;TIMING 프로젝트는 MIT 라이선스에 따라 라이선스가 부여되어 있습니다.
+   &nbsp;TIMING 프로젝트는 Apache License 2.0.에 따라 라이선스가 부여되어 있습니다.  
+   
+&nbsp;Apache License 2.0
+Please see the [LICENSE](LICENSE) file for the full text of the Apache License 2.0.
 
+ <img src="https://img.shields.io/badge/selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white">
 
 
    ##### 👪팀원 소개
