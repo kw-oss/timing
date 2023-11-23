@@ -1,8 +1,10 @@
 
-# 맞춤형 음식점 추천, <TIMING>⏰!      
+# 맞춤형 음식점 추천,TIMING⏰!      
  <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
  <img src="https://img.shields.io/badge/tensorflow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+ <img src="https://img.shields.io/badge/selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white">
+ <br/>
  <br/>
  <br/>
  <br/>
@@ -10,7 +12,7 @@
  
 
 ## 💻프로젝트 소개  
- &nbsp;TIMING은 일일이 검색하지 않아도 자신의 선호도만 입력하면 자동으로 음식점을 추천해주는 웹 프로젝트입니다.
+ &nbsp;TIMING은 일일이 검색하지 않아도 자신의 선호도만 입력하면 자동으로 음식점을 추천해주는 앱 프로젝트입니다.
  
  &nbsp;사용자의 개인적인 식사 선호도와 날씨, 거리, 시간과 같은 제약사항을 고려하여 더 나은 음식점을 추천해줄 것입니다. 단순히 사용자 리뷰와 평점 중심의 정보를 제공했던 웹 사이트들과 달리 실시간 데이터를 기반으로 최신 정보를 반영해 사용자들의 빠른 판단에 도움을 줄 예정입니다.
 
@@ -19,8 +21,8 @@
 
 git clone https://github.com/kw-oss/timing  
 
-&nbsp;main 브랜치에 있는 Timing.exe exe파일과 datadata폴더를 다운로드하고 Timing.exe exe파일을 실행시킵니다.  
-사용자의 장치에 Pythonython과 같은 환경이 설치되지 않았어도 실행이 가능합니다. 
+&nbsp;main 브랜치에 있는 Timing.exe파일과 datadata폴더를 다운로드하고 Timing.exe파일을 실행시킵니다.  
+사용자의 장치에 Python과 같은 환경이 설치되지 않았어도 실행이 가능합니다. 
 
 **💡프로젝트 실행 파일**
 
@@ -34,7 +36,7 @@ git clone https://github.com/kw-oss/timing
 
   &nbsp;프로젝트에 접속한 후, 홈 화면에서 사용자 선호도를 설정하세요.
 
-2. **정보 확인**
+2. **대기**
 
    
   <img src="https://github.com/kw-oss/timing/assets/129186473/9eb29473-8a94-4bcc-bafe-e171f5f717c5.png" width="400" height="400"/>
@@ -67,7 +69,7 @@ git clone https://github.com/kw-oss/timing
 
  Please see the [LICENSE](LICENSE) file for the full text of  License.
 
- <img src="https://img.shields.io/badge/selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white">
+
 
 
    ##### 👪팀원 소개
