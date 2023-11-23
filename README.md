@@ -70,7 +70,9 @@ git clone https://github.com/kw-oss/timing
 
 
 
-   ### 👪팀원 소개
+
+
+   ## 👪팀원 소개
    <table>
   <tbody>
     <tr>
