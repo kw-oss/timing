@@ -17,6 +17,8 @@ from ttkthemes import ThemedTk
 
 import threading
 
+import pyglet
+
 def DataInit(DF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre):
     Meat = ['닭발', '곱창,막창,양', '돼지고기구이', '스테이크,립', '정육식당', '육류,고기요리', '돈가스', '고기뷔페', '양식', '족발,보쌈', '소고기구이', '닭갈비', '치킨,닭강정', '만두', '닭요리',
             '육류,고기', '돈까스,우동', '해물,생선', '곱창,막창', '조개']
@@ -213,6 +215,8 @@ if __name__ == '__main__':
 
     mainframe_padding = 50
 
+    pyglet.font.add_file('NanumGothic.ttf')
+    
     # sticky == alignment(stick or fill)
     # column/rowconfigure(column/row_index, weight, minsize, pad(=padding))
     # weight == 0 means fixed, weight > 0 means expandable, each weight is a ratio with other widget's weight
