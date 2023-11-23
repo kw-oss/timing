@@ -1,6 +1,6 @@
 from tkinter import ttk, Canvas
 from tkinter.constants import *
-from PIL import ImageTk
+from PIL import ImageTk, Image
 
 from surveyWidget import SurveySet
 from loadingDialog import LoadingDialog
@@ -243,7 +243,9 @@ if __name__ == '__main__':
     listframe.grid_remove()
     buttomBar.grid_remove()
 
-    title_image = ImageTk.PhotoImage(file="title.png")
+    title_image = Image.open("title.png")
+    title_image = title_image.resize((240, 80), Image.LANCZOS)
+    title_image = ImageTk.PhotoImage(title_image)
     title_label = Canvas(mainframe, bg='#F9EDB3', width=title_image.width(), height=title_image.height())
     title_label.configure(highlightthickness=0)
     title_label.create_image(0,0, anchor=NW, image=title_image)
