@@ -20,8 +20,8 @@
 
 git clone https://github.com/kw-oss/timing  
 
-&nbsp;main 브랜치에 있는 Timing.exe exe파일과 datadata폴더를 다운로드하고 Timing.exe exe파일을 실행시킵니다.
-사용자의 장치에 P ythonython과 같은 환경이 설치되지 않았어도 실행이 가능합니다. 
+&nbsp;main 브랜치에 있는 Timing.exe exe파일과 datadata폴더를 다운로드하고 Timing.exe exe파일을 실행시킵니다.  
+사용자의 장치에 Pythonython과 같은 환경이 설치되지 않았어도 실행이 가능합니다. 
 
 **💡프로젝트 실행 파일**
 
