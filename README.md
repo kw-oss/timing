@@ -25,7 +25,7 @@ git clone https://github.com/kw-oss/timing
 
 [Click here to try](https://drive.google.com/file/d/1-wlqaGQwXXulYWQJuBgWq46e7n_xYhZr/view?usp=drive_link)
 
-### 📑사용 방법  
+## 📑사용 방법  
 1. **선호도 설정**
 
    
