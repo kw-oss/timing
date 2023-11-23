@@ -57,11 +57,15 @@ git clone https://github.com/kw-oss/timing
 
 
 
+
+
+
+
    #### ➿라이선스
    &nbsp;TIMING 프로젝트는 MIT 라이선스에 따라 라이선스가 부여되어 있습니다.  
-   &nbsp;TIMING 프로젝트에 사용된 나눔고딕 폰트는 SIL Open Font License에 따라 라이선스가 부여되어 있습니다. 
+   &nbsp;TIMING 프로젝트에 사용된 나눔고딕 폰트는 SIL Open Font License에 따라 라이선스가 부여되어 있습니다.  
+  
    &nbsp;TIMING 프로젝트는 Apache License 2.0.에 따라 라이선스가 부여되어 있습니다.  
-   
 &nbsp;Apache License 2.0
 Please see the [LICENSE](LICENSE) file for the full text of the Apache License 2.0.
 
