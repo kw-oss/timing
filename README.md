@@ -28,17 +28,24 @@ git clone https://github.com/kw-oss/timing
 [Click here to try](https://drive.google.com/file/d/1-wlqaGQwXXulYWQJuBgWq46e7n_xYhZr/view?usp=drive_link)
 
 ### 📑사용 방법  
-1. **시간 설정**
-  &nbsp;웹사이트에 접속한 후, 홈 화면에서 시간을 설정하세요.
+1. **선호도 설정**
+   ![img1](https://github.com/kw-oss/timing/assets/129186473/6c5a3527-5455-47e3-ace0-2c630a157ff8)
 
-2. **위치 및 날씨 정보 확인**
-  &nbsp;TIMING은 현재 위치와 날씨 정보를 활용하여 주변의 음식점을 찾습니다. 위치 권한을 허용해 현재 날씨를 확인하세요.
+  &nbsp;프로젝트에 접속한 후, 홈 화면에서 사용자 선호도를 설정하세요.
 
-3. **사용자 선호도 조사**
-  &nbsp;사용자는 각 음식점별 선호도를 입력합니다.
+2. **정보 확인**
+   ![img2](https://github.com/kw-oss/timing/assets/129186473/9eb29473-8a94-4bcc-bafe-e171f5f717c5)
 
-4. **추천 받기**
-   &nbsp;사용자는 필요 정보를 입력한 후 '추천 받기' 버튼을 클릭합니다. TIMING은 미리 학습된 알고리즘을 사용하여 최적의 음식점을 추천해줄 것입니다.
+  &nbsp;TIMING은 사용자의 선호도를 기반으로 음식점을 추천해줍니다. 
+
+3. **추천 받기**
+   ![img3](https://github.com/kw-oss/timing/assets/129186473/632bf187-cb4f-402f-b33f-b8d85ac4bbd3)
+
+   
+  &nbsp;TIMING은 미리 학습된 알고리즘을 사용하여 최적의 음식점을 추천해줄 것입니다. 특히 사용자에게 알맞은 음식점 목록들을 
+  추천 순으로 보여줄 것입니다. 
+
+
 
    *✔️TIMING을 통해 더 나은 식사 경험을 즐겨보세요!*
 
@@ -46,8 +53,7 @@ git clone https://github.com/kw-oss/timing
 
    #### ➿라이선스
    &nbsp;TIMING 프로젝트는 MIT 라이선스에 따라 라이선스가 부여되어 있습니다.  
-
-   
+   &nbsp;TIMING 프로젝트에 사용된 나눔고딕 폰트는 SIL Open Font License에 따라 라이선스가 부여되어 있습니다. 
    &nbsp;TIMING 프로젝트는 Apache License 2.0.에 따라 라이선스가 부여되어 있습니다.  
    
 &nbsp;Apache License 2.0
