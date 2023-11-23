@@ -52,7 +52,7 @@ def ML(survey, data: list):
     Rice_pre = survey.answers['백반&죽'].get()
     FastFood_pre = survey.answers['패스트푸드'].get()
 
-    TrainDF = pd.read_csv('train_data.csv', encoding = 'cp949')
+    TrainDF = pd.read_csv('./data/train_data.csv', encoding = 'cp949')
     TrainDF = DataInit(TrainDF, Meat_pre, Noodle_pre, Rice_pre, FastFood_pre)
 
     # 사용자의 음식 선호도에 맞게 TrianData를 학습시키기 위해서 추가하는 공식
@@ -245,7 +245,7 @@ if __name__ == '__main__':
     listframe.grid_remove()
     buttomBar.grid_remove()
 
-    title_image = Image.open("title.png")
+    title_image = Image.open("./data/title.png")
     title_image = title_image.resize((240, 80), Image.LANCZOS)
     title_image = ImageTk.PhotoImage(title_image)
     title_label = Canvas(mainframe, bg='#F9EDB3', width=title_image.width(), height=title_image.height())
