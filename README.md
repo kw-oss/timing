@@ -1,13 +1,7 @@
 
 # 맞춤형 음식점 추천,TIMING⏰!      
- <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
- <img src="https://img.shields.io/badge/tensorflow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
- <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
- <img src="https://img.shields.io/badge/selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white">
- <br/>
- <br/>
- <br/>
- <br/>
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/tensorflow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white"> <img src="https://img.shields.io/badge/selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white">
+
 
 ## 💻프로젝트 소개  
  &nbsp;TIMING은 일일이 검색하지 않아도 자신의 선호도만 입력하면 자동으로 음식점을 추천해주는 앱 프로젝트입니다.
@@ -32,35 +26,28 @@ git clone https://github.com/kw-oss/timing
    
    <img src="https://github.com/kw-oss/timing/assets/129186473/6c5a3527-5455-47e3-ace0-2c630a157ff8.png" width="400" height="400"/>
 
-  &nbsp;프로젝트에 접속한 후, 홈 화면에서 사용자 선호도를 설정하세요.
+   &nbsp;프로젝트에 접속한 후, 홈 화면에서 사용자 선호도를 설정하세요.
 
 2. **대기**
 
    
-  <img src="https://github.com/kw-oss/timing/assets/129186473/9eb29473-8a94-4bcc-bafe-e171f5f717c5.png" width="400" height="400"/>
+   <img src="https://github.com/kw-oss/timing/assets/129186473/9eb29473-8a94-4bcc-bafe-e171f5f717c5.png" width="400" height="400"/>
 
-  &nbsp;TIMING은 사용자의 선호도를 기반으로 음식점을 추천해줍니다. 
+   &nbsp;TIMING은 사용자의 선호도를 기반으로 음식점을 추천해줍니다. 
 
 3. **추천 받기**
 
    
    <img src="https://github.com/kw-oss/timing/assets/129186473/632bf187-cb4f-402f-b33f-b8d85ac4bbd3.png" width="400" height="400"/>
 
-   
-  &nbsp;TIMING은 미리 학습된 알고리즘을 사용하여 최적의 음식점을 추천해줄 것입니다. 특히 사용자에게 알맞은 음식점 목록들을 
+   &nbsp;TIMING은 미리 학습된 알고리즘을 사용하여 최적의 음식점을 추천해줄 것입니다. 특히 사용자에게 알맞은 음식점 목록들을 
   추천 순으로 보여줄 것입니다. 
 
 
 
    *✔️TIMING을 통해 더 나은 식사 경험을 즐겨보세요!*
 
-
-
-
-
-
-
-   ## ➿라이선스
+## ➿라이선스
    &nbsp;TIMING 프로젝트는 MIT 라이선스에 따라 라이선스가 부여되어 있습니다.  
    &nbsp;TIMING 프로젝트에 사용된 나눔고딕 폰트는 SIL Open Font License에 따라 라이선스가 부여되어 있습니다.  
    &nbsp;TIMING 프로젝트는 Apache License 2.0.에 따라 라이선스가 부여되어 있습니다.  
