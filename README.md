@@ -8,8 +8,6 @@
  <br/>
  <br/>
 
-
-
 ## 💻프로젝트 소개  
  &nbsp;TIMING은 일일이 검색하지 않아도 자신의 선호도만 입력하면 자동으로 음식점을 추천해주는 웹 프로젝트입니다.
  
@@ -76,9 +74,9 @@ Please see the [LICENSE](LICENSE) file for the full text of the Apache License 2
    <table>
   <tbody>
     <tr>
-      <td align="center"><a href=""><img src="width="100px;" alt=""/><br /><sub><b>FE 팀장 : 김준하 </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : 홍윤교 </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : 김재한 </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : 황윤정 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/doldamul"><img src="width="100px;" alt="UI제작 및 디자인 코드 리팩토링"/><br /><sub><b>FE 팀장 : 김준하 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/Hyykk"><img src="" width="100px;" alt="추천 알고리즘 구현 실행파일 제작"/><br /><sub><b>FE 팀원 : 홍윤교 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/Kijan03"><img src="" width="100px;" alt="웹 크롤링, 지도 apiapi구현"/><br /><sub><b>FE 팀원 : 김재한 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/yoonjeonghwang"><img src="" width="100px;" alt="UI디자인 초안 작성 및 타이틀 이미지 제작"/><br /><sub><b>FE 팀원 : 황윤정 </b></sub></a><br /></td>
   </tbody>
 </table>
