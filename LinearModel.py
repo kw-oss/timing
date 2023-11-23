@@ -28,7 +28,7 @@ class RecommendationModel:
         model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae'])
         return model
 
-    def train(self, X, y, epochs=100, batch_size=32, test_size=0.2, random_state=42):
+    def train(self, X, y, epochs=150, batch_size=32, test_size=0.2, random_state=42):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
         self.scaler.fit(X_train)
         X_train_scaled = self.scaler.fit_transform(X_train)
