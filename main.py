@@ -64,7 +64,7 @@ def ML(survey, data: list):
 
     # 모델 생성
     model = RecommendationModel()
-    model.train(X, y, epochs = 100)
+    model.train(X, y, epochs = 200)
 
     location = CurrentLocation()
 
