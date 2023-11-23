@@ -31,21 +31,21 @@ git clone https://github.com/kw-oss/timing
 1. **선호도 설정**
 
    
-   <img src="https://github.com/kw-oss/timing/assets/129186473/6c5a3527-5455-47e3-ace0-2c630a157ff8.png" width="200" height="400"/>
+   <img src="https://github.com/kw-oss/timing/assets/129186473/6c5a3527-5455-47e3-ace0-2c630a157ff8.png" width="400" height="400"/>
 
   &nbsp;프로젝트에 접속한 후, 홈 화면에서 사용자 선호도를 설정하세요.
 
 2. **정보 확인**
 
    
-  <img src="https://github.com/kw-oss/timing/assets/129186473/9eb29473-8a94-4bcc-bafe-e171f5f717c5.png" width="200" height="400"/>
+  <img src="https://github.com/kw-oss/timing/assets/129186473/9eb29473-8a94-4bcc-bafe-e171f5f717c5.png" width="400" height="400"/>
 
   &nbsp;TIMING은 사용자의 선호도를 기반으로 음식점을 추천해줍니다. 
 
 3. **추천 받기**
 
    
-   <img src="https://github.com/kw-oss/timing/assets/129186473/632bf187-cb4f-402f-b33f-b8d85ac4bbd3.png" width="200" height="400"/>
+   <img src="https://github.com/kw-oss/timing/assets/129186473/632bf187-cb4f-402f-b33f-b8d85ac4bbd3.png" width="400" height="400"/>
 
    
   &nbsp;TIMING은 미리 학습된 알고리즘을 사용하여 최적의 음식점을 추천해줄 것입니다. 특히 사용자에게 알맞은 음식점 목록들을 
