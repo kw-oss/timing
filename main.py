@@ -130,6 +130,8 @@ def displaySearchResult(data):
     title_label.grid_remove()
     empty_label.grid_remove()
 
+    listframe.clear() # clear listframe's canvas when reusing
+
     map.configure(image=map_images[0])
 
     # prevents displaying large window bigger than minsize
