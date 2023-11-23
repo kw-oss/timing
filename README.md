@@ -1,12 +1,13 @@
 
 # 맞춤형 음식점 추천, <TIMING>⏰!      
-
-
-
  <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
  <img src="https://img.shields.io/badge/tensorflow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
+ <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
  <br/>
  <br/>
+ <br/>
+
+ 
 
 ## 💻프로젝트 소개  
  &nbsp;TIMING은 일일이 검색하지 않아도 자신의 선호도만 입력하면 자동으로 음식점을 추천해주는 웹 프로젝트입니다.
@@ -62,10 +63,9 @@ git clone https://github.com/kw-oss/timing
    #### ➿라이선스
    &nbsp;TIMING 프로젝트는 MIT 라이선스에 따라 라이선스가 부여되어 있습니다.  
    &nbsp;TIMING 프로젝트에 사용된 나눔고딕 폰트는 SIL Open Font License에 따라 라이선스가 부여되어 있습니다.  
-  
    &nbsp;TIMING 프로젝트는 Apache License 2.0.에 따라 라이선스가 부여되어 있습니다.  
-&nbsp;Apache License 2.0
-Please see the [LICENSE](LICENSE) file for the full text of the Apache License 2.0.
+
+ Please see the [LICENSE](LICENSE) file for the full text of  License.
 
  <img src="https://img.shields.io/badge/selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white">
 
