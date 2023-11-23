@@ -11,15 +11,21 @@
 
 
 ## 💻프로젝트 소개  
- &nbsp;TIMING은 일일이 검색하지 않아도 원하는 시간만 설정하면 자동으로 음식점을 추천해주는 웹 프로젝트입니다.
+ &nbsp;TIMING은 일일이 검색하지 않아도 자신의 선호도만 입력하면 자동으로 음식점을 추천해주는 웹 프로젝트입니다.
  
  &nbsp;사용자의 개인적인 식사 선호도와 날씨, 거리, 시간과 같은 제약사항을 고려하여 더 나은 음식점을 추천해줄 것입니다. 단순히 사용자 리뷰와 평점 중심의 정보를 제공했던 웹 사이트들과 달리 실시간 데이터를 기반으로 최신 정보를 반영해 사용자들의 빠른 판단에 도움을 줄 예정입니다.
 
 
 ## 📁프로젝트 설치
-git clone https://github.com/kw-oss/timing
 
+git clone https://github.com/kw-oss/timing  
 
+&nbsp;main 브랜치에 있는 Timing.exe exe파일과 datadata폴더를 다운로드하고 Timing.exe exe파일을 실행시킵니다.
+사용자의 장치에 P ythonython과 같은 환경이 설치되지 않았어도 실행이 가능합니다. 
+
+**💡프로젝트 실행 파일**
+
+[Click here to try](https://drive.google.com/file/d/1-wlqaGQwXXulYWQJuBgWq46e7n_xYhZr/view?usp=drive_link)
 
 ### 📑사용 방법  
 1. **시간 설정**
@@ -34,14 +40,7 @@ git clone https://github.com/kw-oss/timing
 4. **추천 받기**
    &nbsp;사용자는 필요 정보를 입력한 후 '추천 받기' 버튼을 클릭합니다. TIMING은 미리 학습된 알고리즘을 사용하여 최적의 음식점을 추천해줄 것입니다.
 
-   *TIMING을 통해 더 나은 식사 경험을 즐겨보세요!*
-
-
-
-### ✔️ Branch Rule  
-**master**
-
-
+   *✔️TIMING을 통해 더 나은 식사 경험을 즐겨보세요!*
 
 
 
